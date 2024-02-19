@@ -1,0 +1,4 @@
+framework:
+    uid:
+        enabled: true
+        default_uuid_version: 4

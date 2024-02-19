@@ -1,0 +1,8 @@
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
+/var/
+/vendor/
+# Ignore all env files except the template
+.env
+.env.*
+!.env.template

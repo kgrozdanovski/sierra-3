@@ -1,0 +1,6 @@
+# Remember to use LF and not CRLF line endings in this file!
+
+# Example usage:
+#
+# Execute a job every 5 minutes
+# */5 * * * * /usr/local/bin/php /var/www/html/bin/console command:name > /proc/1/fd/1 2>/proc/1/fd/2

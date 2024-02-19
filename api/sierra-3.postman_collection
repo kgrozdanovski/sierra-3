@@ -1,0 +1,451 @@
+{
+	"info": {
+		"_postman_id": "a3f2d39c-805e-4d39-bf38-91fdc74e3f83",
+		"name": "Sierra-3",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "6706550"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "User Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"admin@sierra.local\",\r\n    \"password\": \"admin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{api_url}}/api/user/register",
+							"protocol": "http",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"register"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Internal Error - Debug Mode",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"kristijan+5@petoko.local\",\r\n    \"password\": \"kristijan123\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{api_url}}/api/user/register",
+									"protocol": "http",
+									"host": [
+										"{{api_url}}"
+									],
+									"path": [
+										"api",
+										"user",
+										"register"
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx/1.23.3"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 19 Jun 2023 20:26:52 GMT"
+								},
+								{
+									"key": "X-Robots-Tag",
+									"value": "noindex"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Internal Server Error\",\n    \"data\": {\n        \"error\": \"The \\\"egulias/email-validator\\\" component is required to use the \\\"Symfony\\\\Component\\\\Validator\\\\Constraints\\\\Email\\\" constraint in strict mode. Try running \\\"composer require egulias/email-validator\\\". in /var/www/html/vendor/symfony/validator/Constraints/Email.php, line 81\",\n        \"trace\": [\n            {\n                \"file\": \"/var/www/html/src/User/Business/ValueObject/UserVO.php\",\n                \"line\": 18,\n                \"function\": \"__construct\",\n                \"class\": \"Symfony\\\\Component\\\\Validator\\\\Constraints\\\\Email\",\n                \"type\": \"->\",\n                \"args\": [\n                    null,\n                    null,\n                    \"strict\",\n                    null,\n                    [\n                        \"create\",\n                        \"update\",\n                        \"register\"\n                    ]\n                ]\n            },\n            {\n                \"file\": \"/var/www/html/vendor/symfony/validator/Mapping/Loader/AnnotationLoader.php\",\n                \"line\": 102,\n                \"function\": \"newInstance\",\n                \"class\": \"ReflectionAttribute\",\n                \"type\": \"->\",\n                \"args\": []\n            },\n            {\n                \"file\": \"/var/www/html/vendor/symfony/validator/Mapping/Loader/AnnotationLoader.php\",\n                \"line\": 57,\n                \"function\": \"getAnnotations\",\n                \"class\": \"Symfony\\\\Component\\\\Validator\\\\Mapping\\\\Loader\\\\AnnotationLoader\",\n                \"type\": \"->\",\n                \"args\": [\n                    {\n                        \"name\": \"username\",\n                        \"class\": \"App\\\\User\\\\Business\\\\ValueObject\\\\UserVO\"\n                    }\n                ]\n            },\n            {\n                \"file\": \"/var/www/html/vendor/symfony/validator/Mapping/Loader/LoaderChain.php\",\n                \"line\": 51,\n                \"function\": \"loadClassMetadata\",\n                \"class\": \"Symfony\\\\Component\\\\Validator\\\\Mapping\\\\Loader\\\\AnnotationLoader\",\n                \"type\": \"->\",\n                \"args\": [\n                    {\n                        \"constraints\": [],\n                        \"constraintsByGroup\": [],\n                        \"cascadingStrategy\": 1,\n                        \"traversalStrategy\": 1,\n                        \"autoMappingStrategy\": 0,\n                        \"name\": \"App\\\\User\\\\Business\\\\ValueObject\\\\UserVO\",\n                        \"defaultGroup\": \"UserVO\",\n                        \"members\": {\n                            \"username\": [\n                                {\n                                    \"constraints\": [\n                                        {\n                                            \"payload\": null,\n                                            \"groups\": [\n                                                \"create\",\n                                                \"register\"\n                                            ],\n                                            \"message\": \"This value should not be blank.\",\n                                            \"allowNull\": false,\n                                            \"normalizer\": null\n                                        },\n                                        {\n                                            \"payload\": null,\n                                            \"groups\": [\n                                                \"create\",\n                                                \"update\",\n                                                \"register\"\n                                            ],\n                                            \"maxMessage\": \"This value is too long. It should have {{ limit }} character or less.|This value is too long. It should have {{ limit }} characters or less.\",\n                                            \"minMessage\": \"This value is too short. It should have {{ limit }} character or more.|This value is too short. It should have {{ limit }} characters or more.\",\n                                            \"exactMessage\": \"This value should have exactly {{ limit }} character.|This value should have exactly {{ limit }} characters.\",\n                                            \"charsetMessage\": \"This value does not match the expected {{ charset }} charset.\",\n                                            \"max\": 254,\n                                            \"min\": null,\n                                            \"charset\": \"UTF-8\",\n                                            \"normalizer\": null,\n                                            \"countUnit\": \"codepoints\"\n                                        }\n                                    ],\n                                    \"constraintsByGroup\": {\n                                        \"create\": [\n                                            {\n                                                \"payload\": null,\n                                                \"groups\": [\n                                                    \"create\",\n                                                    \"register\"\n                                                ],\n                                                \"message\": \"This value should not be blank.\",\n                                                \"allowNull\": false,\n                                                \"normalizer\": null\n                                            },\n                                            {\n                                                \"payload\": null,\n                                                \"groups\": [\n                                                    \"create\",\n                                                    \"update\",\n                                                    \"register\"\n                                                ],\n                                                \"maxMessage\": \"This value is too long. It should have {{ limit }} character or less.|This value is too long. It should have {{ limit }} characters or less.\",\n                                                \"minMessage\": \"This value is too short. It should have {{ limit }} character or more.|This value is too short. It should have {{ limit }} characters or more.\",\n                                                \"exactMessage\": \"This value should have exactly {{ limit }} character.|This value should have exactly {{ limit }} characters.\",\n                                                \"charsetMessage\": \"This value does not match the expected {{ charset }} charset.\",\n                                                \"max\": 254,\n                                                \"min\": null,\n                                                \"charset\": \"UTF-8\",\n                                                \"normalizer\": null,\n                                                \"countUnit\": \"codepoints\"\n                                            }\n                                        ],\n                                        \"register\": [\n                                            {\n                                                \"payload\": null,\n                                                \"groups\": [\n                                                    \"create\",\n                                                    \"register\"\n                                                ],\n                                                \"message\": \"This value should not be blank.\",\n                                                \"allowNull\": false,\n                                                \"normalizer\": null\n                                            },\n                                            {\n                                                \"payload\": null,\n                                                \"groups\": [\n                                                    \"create\",\n                                                    \"update\",\n                                                    \"register\"\n                                                ],\n                                                \"maxMessage\": \"This value is too long. It should have {{ limit }} character or less.|This value is too long. It should have {{ limit }} characters or less.\",\n                                                \"minMessage\": \"This value is too short. It should have {{ limit }} character or more.|This value is too short. It should have {{ limit }} characters or more.\",\n                                                \"exactMessage\": \"This value should have exactly {{ limit }} character.|This value should have exactly {{ limit }} characters.\",\n                                                \"charsetMessage\": \"This value does not match the expected {{ charset }} charset.\",\n                                                \"max\": 254,\n                                                \"min\": null,\n                                                \"charset\": \"UTF-8\",\n                                                \"normalizer\": null,\n                                                \"countUnit\": \"codepoints\"\n                                            }\n                                        ],\n                                        \"update\": [\n                                            {\n                                                \"payload\": null,\n                                                \"groups\": [\n                                                    \"create\",\n                                                    \"update\",\n                                                    \"register\"\n                                                ],\n                                                \"maxMessage\": \"This value is too long. It should have {{ limit }} character or less.|This value is too long. It should have {{ limit }} characters or less.\",\n                                                \"minMessage\": \"This value is too short. It should have {{ limit }} character or more.|This value is too short. It should have {{ limit }} characters or more.\",\n                                                \"exactMessage\": \"This value should have exactly {{ limit }} character.|This value should have exactly {{ limit }} characters.\",\n                                                \"charsetMessage\": \"This value does not match the expected {{ charset }} charset.\",\n                                                \"max\": 254,\n                                                \"min\": null,\n                                                \"charset\": \"UTF-8\",\n                                                \"normalizer\": null,\n                                                \"countUnit\": \"codepoints\"\n                                            }\n                                        ]\n                                    },\n                                    \"cascadingStrategy\": 1,\n                                    \"traversalStrategy\": 2,\n                                    \"autoMappingStrategy\": 0,\n                                    \"class\": \"App\\\\User\\\\Business\\\\ValueObject\\\\UserVO\",\n                                    \"name\": \"username\",\n                                    \"property\": \"username\"\n                                }\n                            ]\n                        },\n                        \"properties\": {\n                            \"username\": {\n                                \"constraints\": [\n                                    {\n                                        \"payload\": null,\n                                        \"groups\": [\n                                            \"create\",\n                                            \"register\"\n                                        ],\n                                        \"message\": \"This value should not be blank.\",\n                                        \"allowNull\": false,\n                                        \"normalizer\": null\n                                    },\n                                    {\n                                        \"payload\": null,\n                                        \"groups\": [\n                                            \"create\",\n                                            \"update\",\n                                            \"register\"\n                                        ],\n                                        \"maxMessage\": \"This value is too long. It should have {{ limit }} character or less.|This value is too long. It should have {{ limit }} characters or less.\",\n                                        \"minMessage\": \"This value is too short. It should have {{ limit }} character or more.|This value is too short. It should have {{ limit }} characters or more.\",\n                                        \"exactMessage\": \"This value should have exactly {{ limit }} character.|This value should have exactly {{ limit }} characters.\",\n                                        \"charsetMessage\": \"This value does not match the expected {{ charset }} charset.\",\n                                        \"max\": 254,\n                                        \"min\": null,\n                                        \"charset\": \"UTF-8\",\n                                        \"normalizer\": null,\n                                        \"countUnit\": \"codepoints\"\n                                    }\n                                ],\n                                \"constraintsByGroup\": {\n                                    \"create\": [\n                                        {\n                                            \"payload\": null,\n                                            \"groups\": [\n                                                \"create\",\n                                                \"register\"\n                                            ],\n                                            \"message\": \"This value should not be blank.\",\n                                            \"allowNull\": false,\n                                            \"normalizer\": null\n                                        },\n                                        {\n                                            \"payload\": null,\n                                            \"groups\": [\n                                                \"create\",\n                                                \"update\",\n                                                \"register\"\n                                            ],\n                                            \"maxMessage\": \"This value is too long. It should have {{ limit }} character or less.|This value is too long. It should have {{ limit }} characters or less.\",\n                                            \"minMessage\": \"This value is too short. It should have {{ limit }} character or more.|This value is too short. It should have {{ limit }} characters or more.\",\n                                            \"exactMessage\": \"This value should have exactly {{ limit }} character.|This value should have exactly {{ limit }} characters.\",\n                                            \"charsetMessage\": \"This value does not match the expected {{ charset }} charset.\",\n                                            \"max\": 254,\n                                            \"min\": null,\n                                            \"charset\": \"UTF-8\",\n                                            \"normalizer\": null,\n                                            \"countUnit\": \"codepoints\"\n                                        }\n                                    ],\n                                    \"register\": [\n                                        {\n                                            \"payload\": null,\n                                            \"groups\": [\n                                                \"create\",\n                                                \"register\"\n                                            ],\n                                            \"message\": \"This value should not be blank.\",\n                                            \"allowNull\": false,\n                                            \"normalizer\": null\n                                        },\n                                        {\n                                            \"payload\": null,\n                                            \"groups\": [\n                                                \"create\",\n                                                \"update\",\n                                                \"register\"\n                                            ],\n                                            \"maxMessage\": \"This value is too long. It should have {{ limit }} character or less.|This value is too long. It should have {{ limit }} characters or less.\",\n                                            \"minMessage\": \"This value is too short. It should have {{ limit }} character or more.|This value is too short. It should have {{ limit }} characters or more.\",\n                                            \"exactMessage\": \"This value should have exactly {{ limit }} character.|This value should have exactly {{ limit }} characters.\",\n                                            \"charsetMessage\": \"This value does not match the expected {{ charset }} charset.\",\n                                            \"max\": 254,\n                                            \"min\": null,\n                                            \"charset\": \"UTF-8\",\n                                            \"normalizer\": null,\n                                            \"countUnit\": \"codepoints\"\n                                        }\n                                    ],\n                                    \"update\": [\n                                        {\n                                            \"payload\": null,\n                                            \"groups\": [\n                                                \"create\",\n                                                \"update\",\n                                                \"register\"\n                                            ],\n                                            \"maxMessage\": \"This value is too long. It should have {{ limit }} character or less.|This value is too long. It should have {{ limit }} characters or less.\",\n                                            \"minMessage\": \"This value is too short. It should have {{ limit }} character or more.|This value is too short. It should have {{ limit }} characters or more.\",\n                                            \"exactMessage\": \"This value should have exactly {{ limit }} character.|This value should have exactly {{ limit }} characters.\",\n                                            \"charsetMessage\": \"This value does not match the expected {{ charset }} charset.\",\n                                            \"max\": 254,\n                                            \"min\": null,\n                                            \"charset\": \"UTF-8\",\n                                            \"normalizer\": null,\n                                            \"countUnit\": \"codepoints\"\n                                        }\n                                    ]\n                                },\n                                \"cascadingStrategy\": 1,\n                                \"traversalStrategy\": 2,\n                                \"autoMappingStrategy\": 0,\n                                \"class\": \"App\\\\User\\\\Business\\\\ValueObject\\\\UserVO\",\n                                \"name\": \"username\",\n                                \"property\": \"username\"\n                            }\n                        },\n                        \"getters\": [],\n                        \"groupSequence\": null,\n                        \"groupSequenceProvider\": false\n                    }\n                ]\n            },\n            {\n                \"file\": \"/var/www/html/vendor/symfony/validator/Mapping/Factory/LazyLoadingMetadataFactory.php\",\n                \"line\": 99,\n                \"function\": \"loadClassMetadata\",\n                \"class\": \"Symfony\\\\Component\\\\Validator\\\\Mapping\\\\Loader\\\\LoaderChain\",\n                \"type\": \"->\",\n                \"args\": [\n                    {\n                        \"constraints\": [],\n                        \"constraintsByGroup\": [],\n                        \"cascadingStrategy\": 1,\n                        \"traversalStrategy\": 1,\n                        \"autoMappingStrategy\": 0,\n                        \"name\": \"App\\\\User\\\\Business\\\\ValueObject\\\\UserVO\",\n                        \"defaultGroup\": \"UserVO\",\n                        \"members\": {\n                            \"username\": [\n                                {\n                                    \"constraints\": [\n                                        {\n                                            \"payload\": null,\n                                            \"groups\": [\n                                                \"create\",\n                                                \"register\"\n                                            ],\n                                            \"message\": \"This value should not be blank.\",\n                                            \"allowNull\": false,\n                                            \"normalizer\": null\n                                        },\n                                        {\n                                            \"payload\": null,\n                                            \"groups\": [\n                                                \"create\",\n                                                \"update\",\n                                                \"register\"\n                                            ],\n                                            \"maxMessage\": \"This value is too long. It should have {{ limit }} character or less.|This value is too long. It should have {{ limit }} characters or less.\",\n                                            \"minMessage\": \"This value is too short. It should have {{ limit }} character or more.|This value is too short. It should have {{ limit }} characters or more.\",\n                                            \"exactMessage\": \"This value should have exactly {{ limit }} character.|This value should have exactly {{ limit }} characters.\",\n                                            \"charsetMessage\": \"This value does not match the expected {{ charset }} charset.\",\n                                            \"max\": 254,\n                                            \"min\": null,\n                                            \"charset\": \"UTF-8\",\n                                            \"normalizer\": null,\n                                            \"countUnit\": \"codepoints\"\n                                        }\n                                    ],\n                                    \"constraintsByGroup\": {\n                                        \"create\": [\n                                            {\n                                                \"payload\": null,\n                                                \"groups\": [\n                                                    \"create\",\n                                                    \"register\"\n                                                ],\n                                                \"message\": \"This value should not be blank.\",\n                                                \"allowNull\": false,\n                                                \"normalizer\": null\n                                            },\n                                            {\n                                                \"payload\": null,\n                                                \"groups\": [\n                                                    \"create\",\n                                                    \"update\",\n                                                    \"register\"\n                                                ],\n                                                \"maxMessage\": \"This value is too long. It should have {{ limit }} character or less.|This value is too long. It should have {{ limit }} characters or less.\",\n                                                \"minMessage\": \"This value is too short. It should have {{ limit }} character or more.|This value is too short. It should have {{ limit }} characters or more.\",\n                                                \"exactMessage\": \"This value should have exactly {{ limit }} character.|This value should have exactly {{ limit }} characters.\",\n                                                \"charsetMessage\": \"This value does not match the expected {{ charset }} charset.\",\n                                                \"max\": 254,\n                                                \"min\": null,\n                                                \"charset\": \"UTF-8\",\n                                                \"normalizer\": null,\n                                                \"countUnit\": \"codepoints\"\n                                            }\n                                        ],\n                                        \"register\": [\n                                            {\n                                                \"payload\": null,\n                                                \"groups\": [\n                                                    \"create\",\n                                                    \"register\"\n                                                ],\n                                                \"message\": \"This value should not be blank.\",\n                                                \"allowNull\": false,\n                                                \"normalizer\": null\n                                            },\n                                            {\n                                                \"payload\": null,\n                                                \"groups\": [\n                                                    \"create\",\n                                                    \"update\",\n                                                    \"register\"\n                                                ],\n                                                \"maxMessage\": \"This value is too long. It should have {{ limit }} character or less.|This value is too long. It should have {{ limit }} characters or less.\",\n                                                \"minMessage\": \"This value is too short. It should have {{ limit }} character or more.|This value is too short. It should have {{ limit }} characters or more.\",\n                                                \"exactMessage\": \"This value should have exactly {{ limit }} character.|This value should have exactly {{ limit }} characters.\",\n                                                \"charsetMessage\": \"This value does not match the expected {{ charset }} charset.\",\n                                                \"max\": 254,\n                                                \"min\": null,\n                                                \"charset\": \"UTF-8\",\n                                                \"normalizer\": null,\n                                                \"countUnit\": \"codepoints\"\n                                            }\n                                        ],\n                                        \"update\": [\n                                            {\n                                                \"payload\": null,\n                                                \"groups\": [\n                                                    \"create\",\n                                                    \"update\",\n                                                    \"register\"\n                                                ],\n                                                \"maxMessage\": \"This value is too long. It should have {{ limit }} character or less.|This value is too long. It should have {{ limit }} characters or less.\",\n                                                \"minMessage\": \"This value is too short. It should have {{ limit }} character or more.|This value is too short. It should have {{ limit }} characters or more.\",\n                                                \"exactMessage\": \"This value should have exactly {{ limit }} character.|This value should have exactly {{ limit }} characters.\",\n                                                \"charsetMessage\": \"This value does not match the expected {{ charset }} charset.\",\n                                                \"max\": 254,\n                                                \"min\": null,\n                                                \"charset\": \"UTF-8\",\n                                                \"normalizer\": null,\n                                                \"countUnit\": \"codepoints\"\n                                            }\n                                        ]\n                                    },\n                                    \"cascadingStrategy\": 1,\n                                    \"traversalStrategy\": 2,\n                                    \"autoMappingStrategy\": 0,\n                                    \"class\": \"App\\\\User\\\\Business\\\\ValueObject\\\\UserVO\",\n                                    \"name\": \"username\",\n                                    \"property\": \"username\"\n                                }\n                            ]\n                        },\n                        \"properties\": {\n                            \"username\": {\n                                \"constraints\": [\n                                    {\n                                        \"payload\": null,\n                                        \"groups\": [\n                                            \"create\",\n                                            \"register\"\n                                        ],\n                                        \"message\": \"This value should not be blank.\",\n                                        \"allowNull\": false,\n                                        \"normalizer\": null\n                                    },\n                                    {\n                                        \"payload\": null,\n                                        \"groups\": [\n                                            \"create\",\n                                            \"update\",\n                                            \"register\"\n                                        ],\n                                        \"maxMessage\": \"This value is too long. It should have {{ limit }} character or less.|This value is too long. It should have {{ limit }} characters or less.\",\n                                        \"minMessage\": \"This value is too short. It should have {{ limit }} character or more.|This value is too short. It should have {{ limit }} characters or more.\",\n                                        \"exactMessage\": \"This value should have exactly {{ limit }} character.|This value should have exactly {{ limit }} characters.\",\n                                        \"charsetMessage\": \"This value does not match the expected {{ charset }} charset.\",\n                                        \"max\": 254,\n                                        \"min\": null,\n                                        \"charset\": \"UTF-8\",\n                                        \"normalizer\": null,\n                                        \"countUnit\": \"codepoints\"\n                                    }\n                                ],\n                                \"constraintsByGroup\": {\n                                    \"create\": [\n                                        {\n                                            \"payload\": null,\n                                            \"groups\": [\n                                                \"create\",\n                                                \"register\"\n                                            ],\n                                            \"message\": \"This value should not be blank.\",\n                                            \"allowNull\": false,\n                                            \"normalizer\": null\n                                        },\n                                        {\n                                            \"payload\": null,\n                                            \"groups\": [\n                                                \"create\",\n                                                \"update\",\n                                                \"register\"\n                                            ],\n                                            \"maxMessage\": \"This value is too long. It should have {{ limit }} character or less.|This value is too long. It should have {{ limit }} characters or less.\",\n                                            \"minMessage\": \"This value is too short. It should have {{ limit }} character or more.|This value is too short. It should have {{ limit }} characters or more.\",\n                                            \"exactMessage\": \"This value should have exactly {{ limit }} character.|This value should have exactly {{ limit }} characters.\",\n                                            \"charsetMessage\": \"This value does not match the expected {{ charset }} charset.\",\n                                            \"max\": 254,\n                                            \"min\": null,\n                                            \"charset\": \"UTF-8\",\n                                            \"normalizer\": null,\n                                            \"countUnit\": \"codepoints\"\n                                        }\n                                    ],\n                                    \"register\": [\n                                        {\n                                            \"payload\": null,\n                                            \"groups\": [\n                                                \"create\",\n                                                \"register\"\n                                            ],\n                                            \"message\": \"This value should not be blank.\",\n                                            \"allowNull\": false,\n                                            \"normalizer\": null\n                                        },\n                                        {\n                                            \"payload\": null,\n                                            \"groups\": [\n                                                \"create\",\n                                                \"update\",\n                                                \"register\"\n                                            ],\n                                            \"maxMessage\": \"This value is too long. It should have {{ limit }} character or less.|This value is too long. It should have {{ limit }} characters or less.\",\n                                            \"minMessage\": \"This value is too short. It should have {{ limit }} character or more.|This value is too short. It should have {{ limit }} characters or more.\",\n                                            \"exactMessage\": \"This value should have exactly {{ limit }} character.|This value should have exactly {{ limit }} characters.\",\n                                            \"charsetMessage\": \"This value does not match the expected {{ charset }} charset.\",\n                                            \"max\": 254,\n                                            \"min\": null,\n                                            \"charset\": \"UTF-8\",\n                                            \"normalizer\": null,\n                                            \"countUnit\": \"codepoints\"\n                                        }\n                                    ],\n                                    \"update\": [\n                                        {\n                                            \"payload\": null,\n                                            \"groups\": [\n                                                \"create\",\n                                                \"update\",\n                                                \"register\"\n                                            ],\n                                            \"maxMessage\": \"This value is too long. It should have {{ limit }} character or less.|This value is too long. It should have {{ limit }} characters or less.\",\n                                            \"minMessage\": \"This value is too short. It should have {{ limit }} character or more.|This value is too short. It should have {{ limit }} characters or more.\",\n                                            \"exactMessage\": \"This value should have exactly {{ limit }} character.|This value should have exactly {{ limit }} characters.\",\n                                            \"charsetMessage\": \"This value does not match the expected {{ charset }} charset.\",\n                                            \"max\": 254,\n                                            \"min\": null,\n                                            \"charset\": \"UTF-8\",\n                                            \"normalizer\": null,\n                                            \"countUnit\": \"codepoints\"\n                                        }\n                                    ]\n                                },\n                                \"cascadingStrategy\": 1,\n                                \"traversalStrategy\": 2,\n                                \"autoMappingStrategy\": 0,\n                                \"class\": \"App\\\\User\\\\Business\\\\ValueObject\\\\UserVO\",\n                                \"name\": \"username\",\n                                \"property\": \"username\"\n                            }\n                        },\n                        \"getters\": [],\n                        \"groupSequence\": null,\n                        \"groupSequenceProvider\": false\n                    }\n                ]\n            },\n            {\n                \"file\": \"/var/www/html/vendor/symfony/validator/Validator/RecursiveContextualValidator.php\",\n                \"line\": 292,\n                \"function\": \"getMetadataFor\",\n                \"class\": \"Symfony\\\\Component\\\\Validator\\\\Mapping\\\\Factory\\\\LazyLoadingMetadataFactory\",\n                \"type\": \"->\",\n                \"args\": [\n                    {}\n                ]\n            },\n            {\n                \"file\": \"/var/www/html/vendor/symfony/validator/Validator/RecursiveContextualValidator.php\",\n                \"line\": 128,\n                \"function\": \"validateObject\",\n                \"class\": \"Symfony\\\\Component\\\\Validator\\\\Validator\\\\RecursiveContextualValidator\",\n                \"type\": \"->\",\n                \"args\": [\n                    {},\n                    \"\",\n                    [\n                        \"App\\\\User\\\\Communication\\\\Controller\\\\UserController::register\"\n                    ],\n                    1,\n                    {}\n                ]\n            },\n            {\n                \"file\": \"/var/www/html/vendor/symfony/validator/Validator/RecursiveValidator.php\",\n                \"line\": 82,\n                \"function\": \"validate\",\n                \"class\": \"Symfony\\\\Component\\\\Validator\\\\Validator\\\\RecursiveContextualValidator\",\n                \"type\": \"->\",\n                \"args\": [\n                    {},\n                    null,\n                    [\n                        \"App\\\\User\\\\Communication\\\\Controller\\\\UserController::register\"\n                    ]\n                ]\n            },\n            {\n                \"file\": \"/var/www/html/src/Kernel/Business/ValueObject/ValueObjectValidator.php\",\n                \"line\": 37,\n                \"function\": \"validate\",\n                \"class\": \"Symfony\\\\Component\\\\Validator\\\\Validator\\\\RecursiveValidator\",\n                \"type\": \"->\",\n                \"args\": [\n                    {},\n                    null,\n                    [\n                        \"App\\\\User\\\\Communication\\\\Controller\\\\UserController::register\"\n                    ]\n                ]\n            },\n            {\n                \"file\": \"/var/www/html/src/Kernel/Communication/HttpKernel/Controller/ValueObjectResolver.php\",\n                \"line\": 45,\n                \"function\": \"validate\",\n                \"class\": \"App\\\\Kernel\\\\Business\\\\ValueObject\\\\ValueObjectValidator\",\n                \"type\": \"->\",\n                \"args\": [\n                    {},\n                    null,\n                    [\n                        \"App\\\\User\\\\Communication\\\\Controller\\\\UserController::register\"\n                    ]\n                ]\n            },\n            {\n                \"file\": \"/var/www/html/vendor/symfony/http-kernel/Controller/ArgumentResolver/TraceableValueResolver.php\",\n                \"line\": 60,\n                \"function\": \"resolve\",\n                \"class\": \"App\\\\Kernel\\\\Communication\\\\HttpKernel\\\\Controller\\\\ValueObjectResolver\",\n                \"type\": \"->\",\n                \"args\": [\n                    {\n                        \"attributes\": {},\n                        \"request\": {},\n                        \"query\": {},\n                        \"server\": {},\n                        \"files\": {},\n                        \"cookies\": {},\n                        \"headers\": {}\n                    },\n                    {}\n                ]\n            },\n            {\n                \"file\": \"/var/www/html/vendor/symfony/http-kernel/Controller/ArgumentResolver.php\",\n                \"line\": 90,\n                \"function\": \"resolve\",\n                \"class\": \"Symfony\\\\Component\\\\HttpKernel\\\\Controller\\\\ArgumentResolver\\\\TraceableValueResolver\",\n                \"type\": \"->\",\n                \"args\": [\n                    {\n                        \"attributes\": {},\n                        \"request\": {},\n                        \"query\": {},\n                        \"server\": {},\n                        \"files\": {},\n                        \"cookies\": {},\n                        \"headers\": {}\n                    },\n                    {}\n                ]\n            },\n            {\n                \"file\": \"/var/www/html/vendor/symfony/http-kernel/Controller/TraceableArgumentResolver.php\",\n                \"line\": 40,\n                \"function\": \"getArguments\",\n                \"class\": \"Symfony\\\\Component\\\\HttpKernel\\\\Controller\\\\ArgumentResolver\",\n                \"type\": \"->\",\n                \"args\": [\n                    {\n                        \"attributes\": {},\n                        \"request\": {},\n                        \"query\": {},\n                        \"server\": {},\n                        \"files\": {},\n                        \"cookies\": {},\n                        \"headers\": {}\n                    },\n                    [\n                        {},\n                        \"register\"\n                    ],\n                    {\n                        \"name\": \"register\",\n                        \"class\": \"App\\\\User\\\\Communication\\\\Controller\\\\UserController\"\n                    }\n                ]\n            },\n            {\n                \"file\": \"/var/www/html/vendor/symfony/http-kernel/HttpKernel.php\",\n                \"line\": 158,\n                \"function\": \"getArguments\",\n                \"class\": \"Symfony\\\\Component\\\\HttpKernel\\\\Controller\\\\TraceableArgumentResolver\",\n                \"type\": \"->\",\n                \"args\": [\n                    {\n                        \"attributes\": {},\n                        \"request\": {},\n                        \"query\": {},\n                        \"server\": {},\n                        \"files\": {},\n                        \"cookies\": {},\n                        \"headers\": {}\n                    },\n                    [\n                        {},\n                        \"register\"\n                    ],\n                    {\n                        \"name\": \"register\",\n                        \"class\": \"App\\\\User\\\\Communication\\\\Controller\\\\UserController\"\n                    }\n                ]\n            },\n            {\n                \"file\": \"/var/www/html/vendor/symfony/http-kernel/HttpKernel.php\",\n                \"line\": 74,\n                \"function\": \"handleRaw\",\n                \"class\": \"Symfony\\\\Component\\\\HttpKernel\\\\HttpKernel\",\n                \"type\": \"->\",\n                \"args\": [\n                    {\n                        \"attributes\": {},\n                        \"request\": {},\n                        \"query\": {},\n                        \"server\": {},\n                        \"files\": {},\n                        \"cookies\": {},\n                        \"headers\": {}\n                    },\n                    1\n                ]\n            },\n            {\n                \"file\": \"/var/www/html/vendor/symfony/http-kernel/Kernel.php\",\n                \"line\": 197,\n                \"function\": \"handle\",\n                \"class\": \"Symfony\\\\Component\\\\HttpKernel\\\\HttpKernel\",\n                \"type\": \"->\",\n                \"args\": [\n                    {\n                        \"attributes\": {},\n                        \"request\": {},\n                        \"query\": {},\n                        \"server\": {},\n                        \"files\": {},\n                        \"cookies\": {},\n                        \"headers\": {}\n                    },\n                    1,\n                    true\n                ]\n            },\n            {\n                \"file\": \"/var/www/html/vendor/symfony/runtime/Runner/Symfony/HttpKernelRunner.php\",\n                \"line\": 35,\n                \"function\": \"handle\",\n                \"class\": \"Symfony\\\\Component\\\\HttpKernel\\\\Kernel\",\n                \"type\": \"->\",\n                \"args\": [\n                    {\n                        \"attributes\": {},\n                        \"request\": {},\n                        \"query\": {},\n                        \"server\": {},\n                        \"files\": {},\n                        \"cookies\": {},\n                        \"headers\": {}\n                    }\n                ]\n            },\n            {\n                \"file\": \"/var/www/html/vendor/autoload_runtime.php\",\n                \"line\": 29,\n                \"function\": \"run\",\n                \"class\": \"Symfony\\\\Component\\\\Runtime\\\\Runner\\\\Symfony\\\\HttpKernelRunner\",\n                \"type\": \"->\",\n                \"args\": []\n            },\n            {\n                \"file\": \"/var/www/html/public/index.php\",\n                \"line\": 5,\n                \"args\": [\n                    \"/var/www/html/vendor/autoload_runtime.php\"\n                ],\n                \"function\": \"require_once\"\n            }\n        ]\n    }\n}"
+						},
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"admin@sierra.local\",\r\n    \"password\": \"admin\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{api_url}}/api/user/register",
+									"protocol": "http",
+									"host": [
+										"{{api_url}}"
+									],
+									"path": [
+										"api",
+										"user",
+										"register"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx/1.25.3"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 19 Feb 2024 22:56:13 GMT"
+								},
+								{
+									"key": "X-Robots-Tag",
+									"value": "noindex"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"OK\",\n    \"data\": {\n        \"id\": \"1eecf7a1-4aa3-6b4e-9be2-f765595ba428\",\n        \"email\": \"admin@sierra.local\",\n        \"userRoles\": [],\n        \"password\": \"$argon2id$v=19$m=65536,t=4,p=1$vLVxGjEIJJDYmKuAOTQM0g$EY0tNRGoX+jLobl/Hkvy8EZdMycm0MpoCfQUdJojdNI\",\n        \"userIdentifier\": \"admin@sierra.local\",\n        \"roles\": [\n            \"ROLE_USER\"\n        ],\n        \"created_by\": {\n            \"id\": \"8d35b4fb-16f1-4d38-b592-580eaec56a99\",\n            \"email\": \"no-reply@sierra.local\",\n            \"userRoles\": [],\n            \"password\": \"\",\n            \"userIdentifier\": \"no-reply@sierra.local\",\n            \"roles\": [\n                \"ROLE_USER\"\n            ],\n            \"created_by\": {\n                \"id\": \"8d35b4fb-16f1-4d38-b592-580eaec56a99\"\n            },\n            \"modified_by\": {\n                \"id\": \"8d35b4fb-16f1-4d38-b592-580eaec56a99\"\n            },\n            \"created_at\": \"2024-02-19 18:12:43\",\n            \"modified_at\": \"2024-02-19 18:12:43\"\n        },\n        \"modified_by\": {\n            \"id\": \"8d35b4fb-16f1-4d38-b592-580eaec56a99\",\n            \"email\": \"no-reply@sierra.local\",\n            \"userRoles\": [],\n            \"password\": \"\",\n            \"userIdentifier\": \"no-reply@sierra.local\",\n            \"roles\": [\n                \"ROLE_USER\"\n            ],\n            \"created_by\": {\n                \"id\": \"8d35b4fb-16f1-4d38-b592-580eaec56a99\"\n            },\n            \"modified_by\": {\n                \"id\": \"8d35b4fb-16f1-4d38-b592-580eaec56a99\"\n            },\n            \"created_at\": \"2024-02-19 18:12:43\",\n            \"modified_at\": \"2024-02-19 18:12:43\"\n        },\n        \"created_at\": \"2024-02-19 22:56:13\",\n        \"modified_at\": \"2024-02-19 22:56:13\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "User Resource",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{api_url}}/api/user/:id",
+							"protocol": "http",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"api",
+								"user",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "8d35b4fb-16f1-4d38-b592-580eaec56a99"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Resource Not Found",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{api_url}}/api/user/:id",
+									"protocol": "http",
+									"host": [
+										"{{api_url}}"
+									],
+									"path": [
+										"api",
+										"user",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "e0c508a2-e653-4bc8-9e02-1abdee040c5a"
+										}
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx/1.23.3"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 19 Jun 2023 01:47:52 GMT"
+								},
+								{
+									"key": "X-Robots-Tag",
+									"value": "noindex"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Resource not found\",\n    \"data\": []\n}"
+						},
+						{
+							"name": "Internal Error - Debug Mode",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{api_url}}/api/user/:id",
+									"protocol": "http",
+									"host": [
+										"{{api_url}}"
+									],
+									"path": [
+										"api",
+										"user",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "8d35b4fb-16f1-4d38-b592-580eaec56a99"
+										}
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx/1.25.3"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 19 Feb 2024 17:14:52 GMT"
+								},
+								{
+									"key": "X-Robots-Tag",
+									"value": "noindex"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Internal Server Error\",\n    \"data\": {\n        \"error\": \"Class \\\"Symfony\\\\Component\\\\Serializer\\\\Mapping\\\\Loader\\\\AnnotationLoader\\\" not found in /var/www/html/src/Kernel/Business/Serializer/Normalizer/Builder/EntityNormalizerBuilder.php, line 63\",\n        \"trace\": [\n            {\n                \"file\": \"/var/www/html/src/Kernel/Business/ValueObject/AbstractResponseVO.php\",\n                \"line\": 128,\n                \"function\": \"withObjectNormalizer\",\n                \"class\": \"App\\\\Kernel\\\\Business\\\\Serializer\\\\Normalizer\\\\Builder\\\\EntityNormalizerBuilder\",\n                \"type\": \"->\",\n                \"args\": []\n            },\n            {\n                \"file\": \"/var/www/html/src/Kernel/Business/ValueObject/AbstractResponseVO.php\",\n                \"line\": 65,\n                \"function\": \"getSerializerNormalizers\",\n                \"class\": \"App\\\\Kernel\\\\Business\\\\ValueObject\\\\AbstractResponseVO\",\n                \"type\": \"->\",\n                \"args\": []\n            },\n            {\n                \"file\": \"/var/www/html/src/Kernel/Business/ValueObject/AbstractResponseVO.php\",\n                \"line\": 53,\n                \"function\": \"getSerializer\",\n                \"class\": \"App\\\\Kernel\\\\Business\\\\ValueObject\\\\AbstractResponseVO\",\n                \"type\": \"->\",\n                \"args\": []\n            },\n            {\n                \"file\": \"/var/www/html/src/Kernel/Business/ValueObject/ResourceResponseVO.php\",\n                \"line\": 43,\n                \"function\": \"getNormalizedData\",\n                \"class\": \"App\\\\Kernel\\\\Business\\\\ValueObject\\\\AbstractResponseVO\",\n                \"type\": \"->\",\n                \"args\": []\n            },\n            {\n                \"file\": \"/var/www/html/src/User/Communication/Controller/UserController.php\",\n                \"line\": 77,\n                \"function\": \"render\",\n                \"class\": \"App\\\\Kernel\\\\Business\\\\ValueObject\\\\ResourceResponseVO\",\n                \"type\": \"->\",\n                \"args\": []\n            },\n            {\n                \"file\": \"/var/www/html/vendor/symfony/http-kernel/HttpKernel.php\",\n                \"line\": 178,\n                \"function\": \"resource\",\n                \"class\": \"App\\\\User\\\\Communication\\\\Controller\\\\UserController\",\n                \"type\": \"->\",\n                \"args\": [\n                    {}\n                ]\n            },\n            {\n                \"file\": \"/var/www/html/vendor/symfony/http-kernel/HttpKernel.php\",\n                \"line\": 76,\n                \"function\": \"handleRaw\",\n                \"class\": \"Symfony\\\\Component\\\\HttpKernel\\\\HttpKernel\",\n                \"type\": \"->\",\n                \"args\": [\n                    {\n                        \"attributes\": {},\n                        \"request\": {},\n                        \"query\": {},\n                        \"server\": {},\n                        \"files\": {},\n                        \"cookies\": {},\n                        \"headers\": {}\n                    },\n                    1\n                ]\n            },\n            {\n                \"file\": \"/var/www/html/vendor/symfony/http-kernel/Kernel.php\",\n                \"line\": 185,\n                \"function\": \"handle\",\n                \"class\": \"Symfony\\\\Component\\\\HttpKernel\\\\HttpKernel\",\n                \"type\": \"->\",\n                \"args\": [\n                    {\n                        \"attributes\": {},\n                        \"request\": {},\n                        \"query\": {},\n                        \"server\": {},\n                        \"files\": {},\n                        \"cookies\": {},\n                        \"headers\": {}\n                    },\n                    1,\n                    true\n                ]\n            },\n            {\n                \"file\": \"/var/www/html/vendor/symfony/runtime/Runner/Symfony/HttpKernelRunner.php\",\n                \"line\": 35,\n                \"function\": \"handle\",\n                \"class\": \"Symfony\\\\Component\\\\HttpKernel\\\\Kernel\",\n                \"type\": \"->\",\n                \"args\": [\n                    {\n                        \"attributes\": {},\n                        \"request\": {},\n                        \"query\": {},\n                        \"server\": {},\n                        \"files\": {},\n                        \"cookies\": {},\n                        \"headers\": {}\n                    }\n                ]\n            },\n            {\n                \"file\": \"/var/www/html/vendor/autoload_runtime.php\",\n                \"line\": 29,\n                \"function\": \"run\",\n                \"class\": \"Symfony\\\\Component\\\\Runtime\\\\Runner\\\\Symfony\\\\HttpKernelRunner\",\n                \"type\": \"->\",\n                \"args\": []\n            },\n            {\n                \"file\": \"/var/www/html/public/index.php\",\n                \"line\": 5,\n                \"args\": [\n                    \"/var/www/html/vendor/autoload_runtime.php\"\n                ],\n                \"function\": \"require_once\"\n            }\n        ]\n    }\n}"
+						},
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{api_url}}/api/user/:id",
+									"protocol": "http",
+									"host": [
+										"{{api_url}}"
+									],
+									"path": [
+										"api",
+										"user",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "8d35b4fb-16f1-4d38-b592-580eaec56a99"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx/1.25.3"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 19 Feb 2024 17:17:15 GMT"
+								},
+								{
+									"key": "X-Robots-Tag",
+									"value": "noindex"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"OK\",\n    \"data\": {\n        \"id\": \"8d35b4fb-16f1-4d38-b592-580eaec56a99\",\n        \"email\": \"no-reply@sierra.local\",\n        \"created_by\": {\n            \"id\": \"8d35b4fb-16f1-4d38-b592-580eaec56a99\"\n        },\n        \"modified_by\": {\n            \"id\": \"8d35b4fb-16f1-4d38-b592-580eaec56a99\"\n        },\n        \"created_at\": \"2024-02-19 18:12:43\",\n        \"modified_at\": \"2024-02-19 18:12:43\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "User Collection",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{api_url}}/api/user",
+							"protocol": "http",
+							"host": [
+								"{{api_url}}"
+							],
+							"path": [
+								"api",
+								"user"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{api_url}}/api/user",
+									"protocol": "http",
+									"host": [
+										"{{api_url}}"
+									],
+									"path": [
+										"api",
+										"user"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "nginx/1.25.3"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 19 Feb 2024 23:44:38 GMT"
+								},
+								{
+									"key": "X-Robots-Tag",
+									"value": "noindex"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": [\n        {\n            \"id\": \"1eecf7a1-4aa3-6b4e-9be2-f765595ba428\",\n            \"email\": \"admin@sierra.local\",\n            \"created_by\": {\n                \"id\": \"8d35b4fb-16f1-4d38-b592-580eaec56a99\",\n                \"email\": \"no-reply@sierra.local\",\n                \"created_by\": {\n                    \"id\": \"8d35b4fb-16f1-4d38-b592-580eaec56a99\"\n                },\n                \"modified_by\": {\n                    \"id\": \"8d35b4fb-16f1-4d38-b592-580eaec56a99\"\n                },\n                \"created_at\": \"2024-02-19 18:12:43\",\n                \"modified_at\": \"2024-02-19 18:12:43\"\n            },\n            \"modified_by\": {\n                \"id\": \"8d35b4fb-16f1-4d38-b592-580eaec56a99\",\n                \"email\": \"no-reply@sierra.local\",\n                \"created_by\": {\n                    \"id\": \"8d35b4fb-16f1-4d38-b592-580eaec56a99\"\n                },\n                \"modified_by\": {\n                    \"id\": \"8d35b4fb-16f1-4d38-b592-580eaec56a99\"\n                },\n                \"created_at\": \"2024-02-19 18:12:43\",\n                \"modified_at\": \"2024-02-19 18:12:43\"\n            },\n            \"created_at\": \"2024-02-19 23:56:12\",\n            \"modified_at\": \"2024-02-19 23:56:12\"\n        },\n        {\n            \"id\": \"8d35b4fb-16f1-4d38-b592-580eaec56a99\",\n            \"email\": \"no-reply@sierra.local\",\n            \"created_by\": {\n                \"id\": \"8d35b4fb-16f1-4d38-b592-580eaec56a99\"\n            },\n            \"modified_by\": {\n                \"id\": \"8d35b4fb-16f1-4d38-b592-580eaec56a99\"\n            },\n            \"created_at\": \"2024-02-19 18:12:43\",\n            \"modified_at\": \"2024-02-19 18:12:43\"\n        }\n    ],\n    \"pagination\": {\n        \"current_page\": 1,\n        \"requested_page\": 1,\n        \"last_page\": 1,\n        \"limit\": 15,\n        \"from\": 1,\n        \"to\": 2,\n        \"total\": 2\n    },\n    \"sorting\": {\n        \"sort_by\": [\n            \"id\"\n        ],\n        \"sort_dir\": [\n            0\n        ]\n    }\n}"
+						}
+					]
+				}
+			]
+		}
+	]
+}

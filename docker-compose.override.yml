@@ -1,0 +1,29 @@
+# Warning: Do not deploy this file to production!
+version: "3.9"
+
+services:
+  api:
+    expose:
+      - "127.0.0.1:9003:9003" # Bind port 9003 for xDebug
+      - "127.0.0.1:9000:9000" # Bind port 9000 for FastCGI pass
+    networks:
+      internal:
+        aliases:
+          - api.sierra.local
+
+  cron:
+    expose:
+      - "127.0.0.1:9003:9003" # Bind port 9003 for xDebug
+      - "127.0.0.1:9000:9000" # Bind port 9000 for FastCGI pass
+
+  nginx:
+    extra_hosts:
+      - "api.sierra.local:127.0.0.1"
+      - "db.sierra.local:127.0.0.1"
+
+  database:
+    command: [ "postgres", "-c", "log_statement=all", "-c", "log_destination=stderr" ]
+    networks:
+      internal:
+        aliases:
+          - db.sierra.local

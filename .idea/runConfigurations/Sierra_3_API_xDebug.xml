@@ -1,0 +1,5 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Sierra-3 API xDebug" type="PhpRemoteDebugRunConfigurationType" factoryName="PHP Remote Debug" focusToolWindowBeforeRun="true" filter_connections="FILTER" server_name="api.sierra.local" session_id="PHPSTORM">
+    <method v="2" />
+  </configuration>
+</component>
