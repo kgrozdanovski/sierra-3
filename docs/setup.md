@@ -75,3 +75,41 @@ You can run a command classes manually by running the following command from the
 
 IDEs such as PHPStorm can also be used to run the command classes manually in a more convenient way.
 An example configuration for PHPStorm can be found in the `.run` directory.
+
+## Performance Improvements
+
+### Docker on Windows Host
+
+Running Symfony applications on Docker on a Windows host can be slow due to the file system performance.
+
+You can improve the performance of the application by using WSL2 as the backend for Docker.
+You can do this by following the instructions in the 
+[Docker documentation](https://docs.docker.com/docker-for-windows/wsl/).
+
+Furthermore, and more importantly, you should move your project files inside the WSL2 file system. This can be done 
+from within the WSL2 terminal by running the following commands:
+```bash
+mkdir sierra-3
+cp -r "/mnt/c/<path-on-host>/sierra-3" .
+```
+
+In the PHPStorm you may now load the project from the WSL2 file system by using the following path:
+```text
+\\wsl$\<distro>\home\<username>\sierra-3
+```
+
+You could possibly see a 100-fold improvement in the performance of the application. This is now much closer to the
+expected performance of the application on an environment with a Linux host.
+
+### Xdebug
+
+Xdebug is a powerful tool for debugging PHP applications. However, it can slow down the application significantly.
+
+To turn off Xdebug, you can comment out the entire contents of the `xdebug.ini` file in the 
+`infrastructure/api/environment/dev` directory and restart the API container.
+
+### Environment Variables
+
+Disabling the `APP_DEBUG` environment variable in your `.env` file can also improve the performance of the application,
+in cases even doubling it. This variable affects the functionality of the Symfony framework and should always be turned
+off for non-dev environments.

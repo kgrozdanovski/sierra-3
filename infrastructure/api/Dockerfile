@@ -36,13 +36,13 @@ then composer install --no-interaction --no-plugins --no-scripts; \
 else composer install --no-interaction --no-plugins --no-scripts --no-dev;\
 fi
 
+# Optimize the Composer Autoloader
+RUN composer dump-autoload --optimize
+
 # Use custom php.ini
 COPY ./infrastructure/api/environment/${app_env}/php.ini /usr/local/etc/php/php.ini
 
 # Xdebug support (enable only for dev env)
 # Make sure to install a specific Xdebug version compatible with the PHP version (https://xdebug.org/docs/compat)
 # Warning: Xdebug is known to slow down the application significantly and will also disable PHP-JIT (PHP 8.0+)
-RUN if [ "x$app_env" = "xdev" ]; then pecl install xdebug-3.3 && docker-php-ext-enable xdebug; fi
-
-# Override docker-php-ext-xdebug.ini
-COPY ./infrastructure/api/environment/${app_env}/xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+RUN if [ "x$app_env" = "xdev" ]; then pecl install xdebug-3.3.1 && docker-php-ext-enable xdebug; fi
