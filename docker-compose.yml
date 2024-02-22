@@ -38,7 +38,6 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./api:/var/www/html
       - "./infrastructure/nginx/environment/${APP_ENV:-dev}/default.conf:/etc/nginx/conf.d/default.conf"
       - "./infrastructure/nginx/environment/${APP_ENV:-dev}/php-fpm.conf:/etc/nginx/php-fpm.conf"
     networks:
