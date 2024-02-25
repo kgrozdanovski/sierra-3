@@ -1,0 +1,65 @@
+# After changing any of these variables, you need to run the following command from the project root in order to
+# persist the changes inside your git hooks:
+#
+# docker compose exec test api/vendor/bin/grumphp git:init --config='/app/api/config/grumphp.yml'
+#
+# All paths in this file should be either apsolute or relative to the Docker Container's (sierra/test) workdir!
+#
+# More details can be found here: https://github.com/phpro/grumphp/blob/v2.x/doc/parameters.md
+# Additional information can be found in the docs/grumphp.md file
+
+grumphp:
+    environment:
+        variables:
+            # The following paths are from within the Docker container
+            GRUMPHP_PROJECT_DIR: '/var/www/html'
+            GRUMPHP_COMPOSER_DIR: '/var/www/html/api'
+            GRUMPHP_BIN_DIR: '/var/www/html/api/vendor/bin'
+    git_hook_variables:
+        # This is the command that will be executed in the .git/hooks/pre-commit shell script when triggered
+        #
+        # If a config path is provided in composer.json::extra::grumphp::config-default-path,
+        # it will be added to this command as the --config flag
+        EXEC_GRUMPHP_COMMAND: 'docker compose exec -i test php '
+    ascii:
+        failed: api/resource/ascii/grumphp-failed.txt
+        succeeded: api/resource/ascii/grumphp-succeeded.txt
+    tasks:
+        composer:
+          file: api/composer.json
+          no_check_publish: true
+        phpcs:
+            standard: 'PSR12'
+        phplint: ~
+        phpmd: ~
+        phpstan: ~
+        securitychecker_composeraudit:
+          working_dir: api
+        stylelint: ~
+        yamllint: ~
+        git_branch_name:
+            whitelist:
+                - "/(release|feature|hotfix|fix|chore)\\/([a-z0-9-.]+)/"
+            blacklist:
+                - "develop"
+                - "master"
+        git_commit_message:
+            allow_empty_message: false
+            enforce_capitalized_subject: false
+            enforce_no_subject_trailing_period: true
+            enforce_single_lined_subject: true
+            max_body_width: 72
+            max_subject_width: 72
+            type_scope_conventions:
+                - types:
+                      - build
+                      - ci
+                      - chore
+                      - docs
+                      - feat
+                      - fix
+                      - perf
+                      - refactor
+                      - revert
+                      - test
+                      - WIP

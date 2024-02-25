@@ -6,6 +6,8 @@ services:
     volumes:
       # Mount here instead of in Dockerfile for simpler setting changes during development
       - "./infrastructure/api/environment/${APP_ENV:-dev}/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini"
+      # Required for grumphp to work
+      - ".git:/git"
     expose:
       - "127.0.0.1:9003:9003" # Bind port 9003 for xDebug
       - "127.0.0.1:9000:9000" # Bind port 9000 for FastCGI pass
@@ -30,3 +32,12 @@ services:
       internal:
         aliases:
           - db.sierra.local
+
+  test:
+    image: sierra/test
+    volumes:
+      - ./:/var/www/html
+    environment:
+      - "APP_ENV=${APP_ENV:-dev}"
+    networks:
+      - internal
