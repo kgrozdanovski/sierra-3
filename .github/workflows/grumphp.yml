@@ -1,0 +1,28 @@
+name: GrumPHP Validation
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  build-and-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build Docker image
+        run: docker build -t sierra/test -f ./infrastructure/test/Dockerfile .
+
+      - name: Run Docker container
+        run: docker compose up -d test
+
+      - name: Run Grumphp pre-commit command
+        run: |
+          DIFF=$(git -c diff.mnemonicprefix=false -c diff.noprefix=false --no-pager diff -r -p -m -M --full-index --no-color --staged | cat)
+          export GRUMPHP_GIT_WORKING_DIR="$(git rev-parse --show-toplevel)"
+          printf "%s\n" "${DIFF}" | docker compose exec -i test php 'api/vendor/bin/grumphp' 'git:pre-commit' '--config=api/config/grumphp.yml' '--skip-success-output'
+        env:
+          GRUMPHP_PROJECT_DIR: '/var/www/html'
+          GRUMPHP_COMPOSER_DIR: '/var/www/html/api'
+          GRUMPHP_BIN_DIR: '/var/www/html/api/vendor/bin'

@@ -3,7 +3,6 @@
 namespace App\User\Persistence\Doctrine\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 use App\Kernel\Persistence\Doctrine\Audit\Attribute as Audit;
 use App\Kernel\Persistence\Doctrine\Entity\EntityInterface;
 use App\Kernel\Persistence\Doctrine\Entity\EntityTrait;
@@ -31,7 +30,7 @@ class Role implements EntityInterface
 
     public function getId(): ?string
     {
-        return (string) $this->id->toRfc4122();
+        return $this->id->toRfc4122();
     }
 
     public function getName(): ?string

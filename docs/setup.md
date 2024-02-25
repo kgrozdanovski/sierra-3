@@ -22,6 +22,7 @@ Hyper-V and enable WSL2 through Windows Features before installing Docker.
 3. Build the application images by running
     ```shell
     docker build --build-arg app_env=dev -t sierra/api -f ./infrastructure/api/Dockerfile .
+    docker build -t sierra/test -f ./infrastructure/test/Dockerfile .
    ```
 
 4. Run the entire container constellation by running
@@ -100,6 +101,12 @@ In the PHPStorm you may now load the project from the WSL2 file system by using 
 
 You could possibly see a 100-fold improvement in the performance of the application. This is now much closer to the
 expected performance of the application on an environment with a Linux host.
+
+> Tip: For easier access to the WSL2 file system, you can create a symlink to the project directory on the Windows host.
+> This can be done by running the following command from a PowerShell terminal on the host:
+> ```powershell
+>  New-Item -ItemType SymbolicLink -Path "C:\path\to\sierra-3" -Target "\\wsl$\<distro>\path\to\sierra-3"
+> ```
 
 ### Xdebug
 

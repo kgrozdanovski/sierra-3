@@ -16,6 +16,9 @@ The commit messages should follow the [Conventional Commits](https://www.convent
 specification. This enables us to automate the versioning and changelog generation process. If the commit
 message does not follow the specification, the CI/CD pipeline will fail the build.
 
+> When committing changes, due to the nature of the Git hooks configured for this project, you must have the Docker
+> engine running on your host machine. This is because the Git hooks are executed from within a Docker container.
+
 ## Merge Request Process
 
 1. Before creating a merge request, make sure that your branch is up-to-date with the `development` branch.
