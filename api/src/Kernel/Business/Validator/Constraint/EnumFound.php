@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraint;
 #[\Attribute]
 final class EnumFound extends Constraint
 {
-    public const NOT_FOUND_ERROR = 'af1540bd-dfc3-4e63-a970-f56c5616bd0a';
+    public const string NOT_FOUND_ERROR = '7e15cc4b-19fb-44af-b7e5-6d4b36912d25';
 
     public string $message = 'Referenced enum value is not found.';
 

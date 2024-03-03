@@ -9,18 +9,18 @@ use Symfony\Component\Validator\Constraint;
 #[\Attribute]
 final class EntityNotFound extends Constraint
 {
-    public const IS_FOUND_ERROR = '9a5f8093-2218-4b1d-8bab-a3b29fef8fe6';
+    public const string IS_FOUND_ERROR = '06179157-9cc6-4b54-84f7-ec029e8471db';
 
     public string $message = 'Referenced entity instance is found.';
 
-    public string $entity;
+    public string $entityName;
 
     #[HasNamedArguments]
-    public function __construct(string $entity, array $groups = null, mixed $payload = null)
+    public function __construct(string $entityName, array $groups = null, mixed $payload = null)
     {
         parent::__construct([], $groups, $payload);
 
-        $this->entity = $entity;
+        $this->entityName = $entityName;
     }
 
     /**
