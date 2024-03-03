@@ -11,6 +11,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Copy .env file
+        run: cp api/.env.template api/.env
+
       - name: Build Docker image
         run: docker build -t sierra/test -f ./infrastructure/test/Dockerfile .
 
