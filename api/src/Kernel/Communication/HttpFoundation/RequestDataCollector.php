@@ -10,13 +10,15 @@
 namespace App\Kernel\Communication\HttpFoundation;
 
 use App\Kernel\Communication\HttpKernel\Exception\BadRequestHttpException;
+use JsonException;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class RequestDataCollector
 {
     public function __construct(
         private readonly RequestStack $requestStack
-    ) {}
+    ) {
+    }
 
     /**
      * @return string
@@ -28,7 +30,8 @@ class RequestDataCollector
         $content = $this->getContent();
         $routeParams = $this->getRouteParams();
 
-        if (\count($keys = array_intersect_key($content, $routeParams)) > 0) {
+        $paramsCount = \count($keys = array_intersect_key($content, $routeParams));
+        if ($paramsCount > 0) {
             throw new BadRequestHttpException(sprintf(
                 'Parameters (%s) used as route attributes can not be used in the request body or query parameters.',
                 implode(', ', array_keys($keys))
@@ -55,8 +58,8 @@ class RequestDataCollector
 
         try {
             return json_decode($content, true, 512, \JSON_BIGINT_AS_STRING | \JSON_THROW_ON_ERROR);
-        } catch (\JsonException $e) {
-            throw new \JsonException('Could not decode request body.', $e->getCode(), $e);
+        } catch (JsonException $e) {
+            throw new JsonException('Could not decode request body.', $e->getCode(), $e);
         }
     }
 
@@ -71,9 +74,14 @@ class RequestDataCollector
     /**
      * @return array
      */
-    public function getController(): string
+    public function getController(): array
     {
-        return $this->requestStack->getCurrentRequest()->attributes->get('_controller');
+        $controllerFqdn = $this->requestStack->getCurrentRequest()->attributes->get('_controller');
+        if (empty($controllerFqdn)) {
+            return [];
+        }
+
+        return explode('::', $controllerFqdn);
     }
 
     /**
@@ -81,6 +89,6 @@ class RequestDataCollector
      */
     public function getControllerAction(): string
     {
-        return $this->getController() ?? 'Default';
+        return $this->getController()[1] ?? 'Default';
     }
 }

@@ -4,6 +4,7 @@ namespace App\User\Business\ValueObject;
 
 use App\Kernel\Business\PropertyAccess\ArrayObject\ArrayObjectInterface;
 use App\Kernel\Business\PropertyAccess\ArrayObject\ArrayObjectTrait;
+use App\Kernel\Business\PropertyAccess\Attribute\Ignore;
 use App\Kernel\Business\Validator\Constraint as AppAssert;
 use App\Kernel\Business\ValueObject\ResourceVO;
 use App\User\Persistence\Doctrine\Entity\User;
@@ -24,7 +25,7 @@ class UserVO extends ResourceVO implements ArrayObjectInterface
     )]
     #[AppAssert\EntityRelationNotFound(
         entity: User::class,
-        relation: '$email',
+        relation: 'email',
         groups: ['create', 'update', 'register']
     )]
     protected string $email;
@@ -36,6 +37,11 @@ class UserVO extends ResourceVO implements ArrayObjectInterface
         groups: ['create', 'update', 'register']
     )]
     protected string $password;
+
+    #[Assert\NotBlank(groups: ['create'])]
+    #[Assert\Valid(groups: ['create', 'update'])]
+    #[Ignore]
+    public ?UserRoleVO $user_role = null;
 
     public function getEmail(): string
     {
@@ -57,5 +63,15 @@ class UserVO extends ResourceVO implements ArrayObjectInterface
     {
         $this->password = $password;
         return $this;
+    }
+
+    public function getUserRoleVO(): ?UserRoleVO
+    {
+        return $this->user_role;
+    }
+
+    public function setUserRoleVO(UserRoleVO $userRoleVO): void
+    {
+        $this->user_role = $userRoleVO;
     }
 }

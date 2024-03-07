@@ -21,11 +21,12 @@ use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 final readonly class ValueObjectResolver implements ValueResolverInterface
 {
     public function __construct(
-        private RequestDataCollector  $requestDataCollector,
+        private RequestDataCollector $requestDataCollector,
         private ValueObjectSerializer $valueObjectSerializer,
         private ValueObjectSubscriber $valueObjectSubscriber,
-        private ValueObjectValidator  $valueObjectValidator
-    ) {}
+        private ValueObjectValidator $valueObjectValidator
+    ) {
+    }
 
     /**
      * Whether this resolver can resolve the value for the given ArgumentMetadata.
@@ -40,10 +41,21 @@ final readonly class ValueObjectResolver implements ValueResolverInterface
      */
     public function resolve(Request $request, ArgumentMetadata $argument): iterable
     {
-        $valueObject = $this->valueObjectSerializer->deserialize($this->requestDataCollector->collect(), $argument->getType());
-        $valueObject = $this->valueObjectSubscriber->subscribe($valueObject);
-        $valueObject = $this->valueObjectValidator->validate($valueObject, null, [$this->requestDataCollector->getControllerAction()]);
+        if (!$argument->getType() || !is_a($argument->getType(), ValueObjectInterface::class, true)) {
+            return [];
+        }
 
-        yield $valueObject;
+        $valueObject = $this->valueObjectSerializer->deserialize(
+            $this->requestDataCollector->collect(),
+            $argument->getType()
+        );
+        $valueObject = $this->valueObjectSubscriber->subscribe($valueObject);
+        $valueObject = $this->valueObjectValidator->validate(
+            $valueObject,
+            null,
+            [$this->requestDataCollector->getControllerAction()]
+        );
+
+        return [$valueObject];
     }
 }

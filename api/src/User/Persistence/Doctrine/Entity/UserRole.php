@@ -2,23 +2,28 @@
 
 namespace App\User\Persistence\Doctrine\Entity;
 
+use App\Kernel\Persistence\Doctrine\Entity\EntityAuditInterface;
+use App\Kernel\Persistence\Doctrine\Entity\EntityAuditTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 use App\Kernel\Persistence\Doctrine\Audit\Attribute as Audit;
 use App\Kernel\Persistence\Doctrine\Entity\EntityInterface;
 use App\Kernel\Persistence\Doctrine\Entity\EntityTrait;
 use App\User\Persistence\Doctrine\Repository\UserRoleRepository;
+use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
 
 #[Audit\Entity(name: UserRoleAudit::class)]
 #[ORM\Entity(repositoryClass: UserRoleRepository::class)]
-class UserRole implements EntityInterface
+class UserRole implements EntityAuditInterface
 {
-    use EntityTrait;
+    use EntityAuditTrait;
 
     #[ORM\Id]
-    #[ORM\Column(type: "guid")]
+    #[ORM\Column(type: UuidType::NAME, unique: true)]
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+    #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
     private ?Uuid $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'roles')]

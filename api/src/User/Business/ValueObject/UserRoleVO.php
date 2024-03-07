@@ -11,8 +11,8 @@ class UserRoleVO extends ResourceVO
 {
     #[Assert\NotBlank(groups: ['create', 'update'])]
     #[Assert\All([
-        new Assert\NotBlank,
-        new Assert\Positive,
+        new Assert\NotBlank(),
+        new Assert\Positive(),
         new AppAssert\EntityFound(entity: Role::class),
     ], groups: ['create', 'update'])]
     private array $roles;
@@ -21,8 +21,6 @@ class UserRoleVO extends ResourceVO
     {
         return $this->roles;
     }
-
-    function stupidCoddeStyle(){}
 
     public function setRoles(array $roles): void
     {

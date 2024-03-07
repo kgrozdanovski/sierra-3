@@ -4,7 +4,10 @@ namespace App\User\Business;
 
 use App\Kernel\Persistence\Doctrine\Handler\TransactionHandlerInterface;
 use App\User\Business\Reader\UserReaderInterface;
+use App\User\Business\Writer\UserRoleWriterInterface;
 use App\User\Business\Writer\UserWriterInterface;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Symfony\Contracts\Service\Attribute\SubscribedService;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
@@ -15,8 +18,8 @@ class UserFactory implements ServiceSubscriberInterface
 
     /**
      * @return UserReaderInterface
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Container\NotFoundExceptionInterface
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     #[SubscribedService]
     public function createUserReader(): UserReaderInterface
@@ -26,8 +29,8 @@ class UserFactory implements ServiceSubscriberInterface
 
     /**
      * @return UserWriterInterface
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Container\NotFoundExceptionInterface
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     #[SubscribedService]
     public function createUserWriter(): UserWriterInterface
@@ -36,9 +39,20 @@ class UserFactory implements ServiceSubscriberInterface
     }
 
     /**
+     * @return UserRoleWriterInterface
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
+    #[SubscribedService]
+    public function createUserRoleWriter(): UserRoleWriterInterface
+    {
+        return $this->container->get(__METHOD__);
+    }
+
+    /**
      * @return TransactionHandlerInterface
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Container\NotFoundExceptionInterface
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     #[SubscribedService]
     public function createTransactionHandler(): TransactionHandlerInterface

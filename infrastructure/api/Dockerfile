@@ -3,6 +3,8 @@ FROM php:8.3-fpm
 # Declare build args
 ARG app_env
 
+ENV COMPOSER_ALLOW_SUPERUSER 1
+
 # get Composer phar
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
