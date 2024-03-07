@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Kernel\Communication\Controller\ControllerInterface;
+use Symfony\Component\Routing\Requirement\Requirement;
 
 class UserController extends AbstractController implements ControllerInterface
 {
@@ -34,10 +35,9 @@ class UserController extends AbstractController implements ControllerInterface
             ->render();
     }
 
-    // todo: move regexp to new abstract controller parent class constant
     #[Route(
         '/api/user/{id}',
-        requirements: ['id' => '[a-f0-9]{8}\-[a-f0-9]{4}\-4[a-f0-9]{3}\-(8|9|a|b)[a-f0-9]{3}\-[a-f0-9]{12}'],
+        requirements: ['id' => Requirement::UUID_V4],
         methods: ['GET']
     )]
     public function resource(ResourceVO $resourceVO): JsonResponse

@@ -13,6 +13,7 @@ namespace App\Kernel\Symfony\EventSubscriber;
 
 use App\Kernel\Communication\HttpFoundation\Response\ApiResponse;
 use App\Kernel\Communication\HttpFoundation\Type\StatusCode;
+use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -49,6 +50,7 @@ class ExceptionEventHandler implements EventSubscriberInterface
      * Handle unhandled exceptions.
      *
      * @param ExceptionEvent $event
+     * @throws Exception
      */
     public function handle(ExceptionEvent $event): void
     {
@@ -59,19 +61,7 @@ class ExceptionEventHandler implements EventSubscriberInterface
         }
 
         $response = new ApiResponse();
-
         $throwable = $event->getThrowable();
-
-        // Get all the available context information
-//        if (get_class($throwable) === ValidationException::class) {
-//            $logContext = array_merge(
-//                LogCtx::jsonException($throwable),
-//                RequestCtx::full($event->getRequest())
-//            );
-//        }
-//        else {
-//            $logContext = array_merge(LogCtx::throwable($throwable), RequestCtx::full($event->getRequest()));
-//        }
 
         // Handle various exceptions and respond accordingly
         switch (get_class($throwable)) {
@@ -139,7 +129,6 @@ class ExceptionEventHandler implements EventSubscriberInterface
                     ->render();
 
                 $event->setResponse($eventResponse);
-
 //                $this->logger->notice($throwable->getMessage(), LogCtx::throwable($throwable));
                 return;
             // 500
@@ -160,7 +149,6 @@ class ExceptionEventHandler implements EventSubscriberInterface
                     ->render();
 
                 $event->setResponse($eventResponse);
-
 //                $this->logger->emergency('Unhandled throwable: ' . $throwable->getMessage(), $logContext);
         }
     }
@@ -176,7 +164,7 @@ class ExceptionEventHandler implements EventSubscriberInterface
         $unpackedMessages = [];
 
         do {
-            $message = json_decode($throwable->getMessage());
+            $message = json_decode($throwable->getMessage(), true);
 
             if (is_array($message)) {
                 foreach ($message as $errorKey => $errorValue) {
@@ -184,16 +172,14 @@ class ExceptionEventHandler implements EventSubscriberInterface
                     $unpackedMessages[$errorKey] = $errorValue;
                 }
             }
-        }
-        while ($t = $throwable->getPrevious());
+        } while ($throwable->getPrevious());
 
         // If there were no nested errors, return the original array
         if (!empty($unpackedMessages)) {
             return $unpackedMessages;
         }
-        else {
-            return $message;
-        }
+
+        return $message;
     }
 
     /**

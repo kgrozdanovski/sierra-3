@@ -3,6 +3,7 @@
 namespace App\User\Persistence\Doctrine\Repository;
 
 use App\Kernel\Persistence\Doctrine\Repository\AbstractEntityRepository;
+use App\User\Persistence\Doctrine\Collection\UserRoleCollection;
 use App\User\Persistence\Doctrine\Entity\UserRole;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -21,7 +22,13 @@ class UserRoleRepository extends AbstractEntityRepository
         parent::__construct($registry, UserRole::class);
     }
 
-    public function save(UserRole $entity, bool $flush = false): void
+    /**
+     * @param UserRole $entity
+     * @param bool $flush
+     *
+     * @return void
+     */
+    public function add(UserRole $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -30,9 +37,49 @@ class UserRoleRepository extends AbstractEntityRepository
         }
     }
 
+    /**
+     * @param UserRoleCollection $collection
+     * @param bool $flush
+     *
+     * @return void
+     */
+    public function addCollection(UserRoleCollection $collection, bool $flush = false): void
+    {
+        foreach ($collection as $item) {
+            $this->getEntityManager()->persist($item);
+        }
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+    /**
+     * @param UserRole $entity
+     * @param bool $flush
+     *
+     * @return void
+     */
     public function remove(UserRole $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+    /**
+     * @param UserRoleCollection $collection
+     * @param bool $flush
+     *
+     * @return void
+     */
+    public function removeCollection(UserRoleCollection $collection, bool $flush = false): void
+    {
+        foreach ($collection as $item) {
+            $this->getEntityManager()->remove($item);
+        }
 
         if ($flush) {
             $this->getEntityManager()->flush();

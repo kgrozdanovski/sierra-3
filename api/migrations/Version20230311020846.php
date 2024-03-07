@@ -182,6 +182,27 @@ final class Version20230311020846 extends AbstractMigration
                 \'8d35b4fb-16f1-4d38-b592-580eaec56a99\'
             )'
         );
+
+        // Create default roles
+        $this->addSql('INSERT INTO "role" (id, name, created_by, modified_by) 
+            VALUES (
+                \'c24f318c-84eb-4a64-a9c5-ac4eeded1aa4\',
+                \'admin\',
+                \'8d35b4fb-16f1-4d38-b592-580eaec56a99\',
+                \'8d35b4fb-16f1-4d38-b592-580eaec56a99\'
+            )'
+        );
+
+        // Link default roles to default user
+        $this->addSql('INSERT INTO "user_role" (id, user_id, role_id, created_by, modified_by) 
+            VALUES (
+                \'c24f318c-84eb-4a64-a9c5-ac4eeded1aa4\',
+                \'8d35b4fb-16f1-4d38-b592-580eaec56a99\',
+                \'c24f318c-84eb-4a64-a9c5-ac4eeded1aa4\',
+                \'8d35b4fb-16f1-4d38-b592-580eaec56a99\',
+                \'8d35b4fb-16f1-4d38-b592-580eaec56a99\'
+            )'
+        );
     }
 
     public function down(Schema $schema): void

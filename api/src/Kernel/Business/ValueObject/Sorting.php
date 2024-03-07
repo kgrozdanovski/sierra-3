@@ -9,6 +9,7 @@
 
 namespace App\Kernel\Business\ValueObject;
 
+use ReflectionClass;
 use Symfony\Component\Serializer\Annotation\SerializedName;
 
 final class Sorting
@@ -76,16 +77,16 @@ final class Sorting
     }
 
     /**
-     * @param string $entityName
+     * @param string $entity
      *
      * @return array
      */
-    public function getCollectionByEntityName(string $entityName): array
+    public function getCollectionByEntityName(string $entity): array
     {
         $sorting = [];
 
         foreach (array_combine($this->sortBy, $this->sortDir) as $sortBy => $sortDir) {
-            $sortArgument = $this->findSortArgument($sortBy, $entityName);
+            $sortArgument = $this->findSortArgument($sortBy, $entity);
 
             if ($sortArgument !== null) {
                 $sorting[$sortArgument] = $this->getSortDirAsString($sortDir);
@@ -97,14 +98,14 @@ final class Sorting
 
     /**
      * @param string $argument
-     * @param string $entityName
+     * @param string $entity
      *
      * @return string|null
      */
-    private function findSortArgument(string $argument, string $entityName): ?string
+    private function findSortArgument(string $argument, string $entity): ?string
     {
         try {
-            $reflectionClass = new \ReflectionClass($entityName);
+            $reflectionClass = new ReflectionClass($entity);
 
             if ($reflectionClass->hasProperty($argument)) {
                 return $argument;

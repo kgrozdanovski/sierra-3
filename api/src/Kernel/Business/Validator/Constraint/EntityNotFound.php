@@ -13,14 +13,14 @@ final class EntityNotFound extends Constraint
 
     public string $message = 'Referenced entity instance is found.';
 
-    public string $entityName;
+    public string $entity;
 
     #[HasNamedArguments]
-    public function __construct(string $entityName, array $groups = null, mixed $payload = null)
+    public function __construct(string $entity, array $groups = null, mixed $payload = null)
     {
         parent::__construct([], $groups, $payload);
 
-        $this->entityName = $entityName;
+        $this->entity = $entity;
     }
 
     /**

@@ -2,6 +2,10 @@
 
 namespace App\User\Persistence\Doctrine\Entity;
 
+use App\Kernel\Persistence\Doctrine\Entity\BlameAuditInterface;
+use App\Kernel\Persistence\Doctrine\Entity\BlameAuditTrait;
+use App\Kernel\Persistence\Doctrine\Entity\TimestampAuditInterface;
+use App\Kernel\Persistence\Doctrine\Entity\TimestampAuditTrait;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
@@ -37,9 +41,10 @@ class User implements EntityAuditInterface, UserInterface, PasswordAuthenticated
     #[ORM\Column]
     private ?string $password = null;   // The hashed password
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserRole::class, cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(targetEntity: UserRole::class, mappedBy: 'user', cascade: ['persist', 'remove'])]
     private Collection $userRoles;
 
+    #[Groups(['user_resource', 'user_collection'])]
     private Collection $roles;
 
     public function __construct()
@@ -134,14 +139,11 @@ class User implements EntityAuditInterface, UserInterface, PasswordAuthenticated
      */
     public function getRoles(): array
     {
-        // Guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
-
         foreach ($this->userRoles as $userRole) {
-            $roles[] = $userRole->getRole();
+            $roles[] = $userRole->getRole()->getName();
         }
 
-        return $roles;
+        return $roles ?? [];
     }
 
     /**

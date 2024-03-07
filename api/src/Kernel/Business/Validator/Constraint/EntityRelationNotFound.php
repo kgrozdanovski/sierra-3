@@ -13,16 +13,16 @@ final class EntityRelationNotFound extends Constraint
 
     public string $message = 'Referenced entity instance relation is found.';
 
-    public string $entityName;
+    public string $entity;
 
     public string $relation;
 
     #[HasNamedArguments]
-    public function __construct(string $entityName, string $relation, array $groups = null, mixed $payload = null)
+    public function __construct(string $entity, string $relation, array $groups = null, mixed $payload = null)
     {
         parent::__construct([], $groups, $payload);
 
-        $this->entityName = $entityName;
+        $this->entity = $entity;
         $this->relation = $relation;
     }
 

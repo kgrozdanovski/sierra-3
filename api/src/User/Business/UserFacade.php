@@ -13,7 +13,8 @@ class UserFacade implements UserFacadeInterface
 {
     public function __construct(
         private readonly UserFactory $factory
-    ) {}
+    ) {
+    }
 
     /**
      * {@inheritDoc}
@@ -23,9 +24,20 @@ class UserFacade implements UserFacadeInterface
     public function createResource(UserVO $userVO): ResourceResponseVO
     {
         return $this->factory->createTransactionHandler()->handleTransaction(function () use ($userVO) {
-            return $this->factory
+            $userResponseVO = $this->factory
                 ->createUserWriter()
                 ->create($userVO, $userVO->getUserContext());
+
+            $this->factory
+                ->createUserRoleWriter()
+                ->create($userVO->getUserRoleVO(), $userResponseVO->getData());
+
+            return $userResponseVO
+                ->setSerializerGroups([
+                    'user_resource',
+                    'user_relation',
+                    'metadata'
+                ]);
         });
     }
 

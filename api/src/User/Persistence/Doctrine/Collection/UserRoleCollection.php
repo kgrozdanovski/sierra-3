@@ -8,10 +8,27 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 class UserRoleCollection extends ArrayCollection
 {
-    public function containsRole(Role $role): bool
+    /**
+     * @param int $roleId
+     *
+     * @return bool
+     */
+    public function containsRoleById(int $roleId): bool
     {
-        return $this->exists(function ($key, UserRole $userRole) use ($role) {
-            return $userRole->getRole()->getId() === $role->getId();
+        return $this->exists(function ($key, UserRole $userRole) use ($roleId) {
+            return $userRole->getRole()->getId() === $roleId;
+        });
+    }
+
+    /**
+     * @param UserRoleCollection $collection
+     *
+     * @return UserRoleCollection
+     */
+    public function diff(UserRoleCollection $collection): UserRoleCollection
+    {
+        return $this->filter(function (UserRole $userRole) use ($collection) {
+            return !$collection->containsRoleById($userRole->getRole()->getId());
         });
     }
 }
