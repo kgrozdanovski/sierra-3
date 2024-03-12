@@ -27,7 +27,7 @@ jobs:
         run: |
           DIFF=$(git -c diff.mnemonicprefix=false -c diff.noprefix=false --no-pager diff -r -p -m -M --full-index --no-color --staged | cat)
           export GRUMPHP_GIT_WORKING_DIR="$(git rev-parse --show-toplevel)"
-          printf "%s\n" "${DIFF}" | docker compose exec -i test php 'api/vendor/bin/grumphp' 'git:pre-commit' '--config=api/config/grumphp.yml' '--skip-success-output'
+          printf "%s\n" "${DIFF}" | docker compose exec -iT test php 'api/vendor/bin/grumphp' 'git:pre-commit' '--config=api/config/grumphp.yml' '--skip-success-output'
         env:
           GRUMPHP_PROJECT_DIR: '/var/www/html'
           GRUMPHP_COMPOSER_DIR: '/var/www/html/api'

@@ -35,6 +35,8 @@ services:
     image: sierra/test
     volumes:
       - ./:/var/www/html
+      # Do not override the `api/vendor` directory
+      - /var/www/html/api/vendor
     environment:
       - "APP_ENV=${APP_ENV:-dev}"
     networks:
