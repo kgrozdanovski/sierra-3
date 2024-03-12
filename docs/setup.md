@@ -13,19 +13,29 @@ Hyper-V and enable WSL2 through Windows Features before installing Docker.
     HTTPS clone URL: https://git.jetbrains.space/involve/diamond-data-provider/diamond-data-provider.git
     ```
 
-2. Install the Composer dependencies by running
+2. Create a `.env` file in the `api` directory by copying the `.env.template` file and filling in the necessary values
+
+3. Install the Composer dependencies by running
     ```shell
+    cd ./api
     docker run --rm --interactive --tty --volume .:/app composer install
     ```
     > Note: This is only necessary on a dev environment or if you are not using Docker to run the application.
 
-3. Build the application images by running
+4. Build the application images by running the following commands from the project root
     ```shell
     docker build --build-arg app_env=dev -t sierra/api -f ./infrastructure/api/Dockerfile .
+    docker build --build-arg app_env=dev -t sierra/cron -f ./infrastructure/cron/Dockerfile .
     docker build -t sierra/test -f ./infrastructure/test/Dockerfile .
    ```
+   
+   > Note: If building the `sierra/cron` image fails with
+   > ```shell
+   > process "/bin/sh -c /usr/bin/crontab /etc/cron.d/crontab" did not complete successfully
+   > ```
+   > make sure the `infrastructure/cron/crontab` file has LF line endings and not CRLF line endings.
 
-4. Run the entire container constellation by running
+5. Run the entire container constellation by running
    ```shell
    APP_ENV=dev docker-compose up -d
     ```
@@ -34,18 +44,23 @@ Hyper-V and enable WSL2 through Windows Features before installing Docker.
    $env:APP_ENV="dev"; docker-compose up -d
    ```
    
-5. Run the database migrations by running
+6. Run the database migrations by running
    ```shell
    docker-compose exec api php bin/console doctrine:migrations:migrate
     ```
 
-5Add the following entries to your `/etc/hosts` or `C:\Windows\System32\drivers\etc\hosts` file
+7. Add the following entries to your `/etc/hosts` or `C:\Windows\System32\drivers\etc\hosts` file
     ```text
     127.0.0.1 api.sierra.local
     127.0.0.1 db.sierra.local
     ```
    > Note: If you are using Windows, you need to run your editor as administrator in order to be able
    > to edit the hosts file.
+
+8. Setup the Git Hooks by running the following command from your host machine
+    ```bash
+    docker compose exec test /var/www/html/api/vendor/bin/grumphp git:init --config='/var/www/html/api/config/grumphp.yml'
+    ```
 
 ### Optional cron runner
 
@@ -120,3 +135,8 @@ To turn off Xdebug, you can comment out the entire contents of the `xdebug.ini` 
 Disabling the `APP_DEBUG` environment variable in your `.env` file can also improve the performance of the application,
 in cases even doubling it. This variable affects the functionality of the Symfony framework and should always be turned
 off for non-dev environments.
+
+### Pre-commit Hooks
+
+Make sure you have the `test` service running on your host and enable the pre-commit hooks by following the steps
+outlined in the [GrumPHP documentation](grumphp.md).
