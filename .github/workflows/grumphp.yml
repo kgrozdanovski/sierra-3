@@ -1,6 +1,9 @@
 name: GrumPHP Validation
 
 on:
+  # Enable manual trigger
+  workflow_dispatch:
+  # Automatically trigger the workflow on pull request events
   pull_request:
     types: [opened, synchronize]
 
