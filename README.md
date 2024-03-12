@@ -41,6 +41,11 @@ additional logic for more detailed error tracking and cross-referencing across m
 - **Database**: Integrated with PostgreSQL, with additional features for improved security and a basic 3NF structure
 
 
+## Getting Started
+
+After cloning the project, follow the steps outlined in the [setup.md](docs/setup.md) to get up and running.
+
+
 ## Contributing
 
 Please read the [CONTRIBUTING.md](CONTRIBUTING.md) file for details on our code of conduct, and the process for
