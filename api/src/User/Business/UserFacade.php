@@ -2,7 +2,6 @@
 
 namespace App\User\Business;
 
-//use App\User\Business\ValueObject\UserVO;
 use App\Kernel\Business\ValueObject\CollectionResponseVO;
 use App\Kernel\Business\ValueObject\CollectionVO;
 use App\Kernel\Business\ValueObject\ResourceResponseVO;
@@ -65,27 +64,44 @@ class UserFacade implements UserFacadeInterface
             ->readCollection($collectionVO);
     }
 
-//    /**
-//     * {@inheritDoc}
-//     *
-//     * @api
-//     */
-//    public function updateResource(UserVO $userVO): ResourceResponseVO
-//    {
-//        return $this->factory->createTransactionHandler()->handleTransaction(function () use ($userVO) {
-//            $userResponseVO = $this->factory
-//                ->createUserReader()
-//                ->read($userVO);
-//
-//            $this->factory
-//                ->createUserWriter()
-//                ->update($userVO, $userResponseVO->getData());
-//
-//            $this->factory
-//                ->createUserPaymentWriter()
-//                ->update($userResponseVO->getData());
-//
-//            return $userResponseVO;
-//        });
-//    }
+    /**
+     * {@inheritDoc}
+     *
+     * @api
+     */
+    public function updateResource(UserVO $userVO): ResourceResponseVO
+    {
+        return $this->factory->createTransactionHandler()->handleTransaction(function () use ($userVO) {
+            $userResponseVO = $this->factory
+                ->createUserReader()
+                ->read($userVO);
+
+            $this->factory
+                ->createUserWriter()
+                ->update($userVO, $userResponseVO->getData());
+
+            if ($userVO->getUserRoleVO() !== null) {
+                $this->factory
+                    ->createUserRoleWriter()
+                    ->update($userVO->getUserRoleVO(), $userResponseVO->getData());
+            }
+
+            return $userResponseVO;
+        });
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @api
+     */
+    public function deleteResource(UserVO $userVO): ResourceResponseVO
+    {
+        return $this->factory->createTransactionHandler()->handleTransaction(function () use ($userVO) {
+            // Soft-delete the User and all related entities
+            return $this->factory
+                ->createUserDeleter()
+                ->delete($userVO);
+        });
+    }
 }

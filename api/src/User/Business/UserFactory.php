@@ -6,6 +6,7 @@ use App\Kernel\Persistence\Doctrine\Handler\TransactionHandlerInterface;
 use App\User\Business\Reader\UserReaderInterface;
 use App\User\Business\Writer\UserRoleWriterInterface;
 use App\User\Business\Writer\UserWriterInterface;
+use App\User\Business\Deleter\UserDeleterInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Symfony\Contracts\Service\Attribute\SubscribedService;
@@ -45,6 +46,17 @@ class UserFactory implements ServiceSubscriberInterface
      */
     #[SubscribedService]
     public function createUserRoleWriter(): UserRoleWriterInterface
+    {
+        return $this->container->get(__METHOD__);
+    }
+
+    /**
+     * @return UserDeleterInterface
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
+    #[SubscribedService]
+    public function createUserDeleter(): UserDeleterInterface
     {
         return $this->container->get(__METHOD__);
     }

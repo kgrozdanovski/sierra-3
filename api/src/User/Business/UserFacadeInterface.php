@@ -8,8 +8,6 @@ use App\Kernel\Business\ValueObject\ResourceResponseVO;
 use App\Kernel\Business\ValueObject\ResourceVO;
 use App\User\Business\ValueObject\UserVO;
 
-//use App\User\Business\ValueObject\UserVO;
-
 interface UserFacadeInterface
 {
     /**
@@ -48,17 +46,29 @@ interface UserFacadeInterface
      *
      */
     public function readCollection(CollectionVO $collectionVO): CollectionResponseVO;
-//
-//    /**
-//     * Specification:
-//     * - Updates the designated User resource.
-//     * - Updates any relations to other entities.
-//     * - Updates any relations with other Users.
-//     *
-//     * @param UserVO $userVO
-//     *
-//     * @return ResourceResponseVO
-//     * @api
-//     */
-//    public function updateResource(UserVO $userVO): ResourceResponseVO;
+
+    /**
+     * Specification:
+     * - Updates the designated User resource.
+     * - Updates any relations to other entities.
+     * - Updates any relations with other Users.
+     *
+     * @param UserVO $userVO
+     *
+     * @return ResourceResponseVO
+     * @api
+     */
+    public function updateResource(UserVO $userVO): ResourceResponseVO;
+
+    /**
+     * Specification:
+     * - Deletes the requested User resource.
+     * - Deletes any relations to other entities.
+     *
+     * @param UserVO $userVO
+     *
+     * @return ResourceResponseVO
+     * @api
+     */
+    public function deleteResource(UserVO $userVO): ResourceResponseVO;
 }
