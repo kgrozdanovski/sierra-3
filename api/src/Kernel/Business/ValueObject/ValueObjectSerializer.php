@@ -27,8 +27,12 @@ readonly class ValueObjectSerializer
      *
      * @return ValueObjectInterface
      */
-    public function deserialize(mixed $data, string $type, string $format = JsonEncoder::FORMAT, array $context = []): ValueObjectInterface
-    {
+    public function deserialize(
+        mixed $data,
+        string $type,
+        string $format = JsonEncoder::FORMAT,
+        array $context = []
+    ): ValueObjectInterface {
         try {
             return $this->serializer->deserialize($data, $type, $format, $context);
         } catch (\Exception $e) {

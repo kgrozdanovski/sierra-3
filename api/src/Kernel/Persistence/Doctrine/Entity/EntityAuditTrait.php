@@ -7,4 +7,5 @@ trait EntityAuditTrait
     use EntityTrait;
     use BlameAuditTrait;
     use TimestampAuditTrait;
+    use SoftDeleteAuditTrait;
 }

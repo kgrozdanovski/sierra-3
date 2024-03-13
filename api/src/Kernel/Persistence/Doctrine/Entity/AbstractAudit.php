@@ -2,16 +2,28 @@
 
 namespace App\Kernel\Persistence\Doctrine\Entity;
 
+use App\Kernel\Persistence\Doctrine\Generator\UuidV4Generator;
 use App\User\Persistence\Doctrine\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Uid\UuidV4;
 
+/**
+ * Class AbstractAudit
+ *
+ * Warning: Generated columns must be defined in the inheriting entity, they will not be
+ * registered within this MappedSuperclass.
+ *
+ * @class AbstractAudit
+ * @package App\Kernel\Persistence\Doctrine\Entity
+ */
 #[ORM\MappedSuperclass]
 abstract class AbstractAudit
 {
     #[ORM\Id]
-    #[ORM\Column]
-    protected ?Uuid $id = null;
+    #[ORM\Column(type: UuidType::NAME, unique: true)]
+    private ?UuidV4 $id = null;
 
     #[ORM\Column(name: 'request_id')]
     protected Uuid $requestId;
@@ -34,6 +46,14 @@ abstract class AbstractAudit
 
     #[ORM\Column(name: 'created_at')]
     protected \DateTimeImmutable $createdAt;
+
+    /**
+     * @return string|null
+     */
+    public function getId(): ?string
+    {
+        return (string) $this->id->toRfc4122();
+    }
 
     /**
      * @return string
