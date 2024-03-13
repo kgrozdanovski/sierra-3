@@ -56,8 +56,8 @@ class UserController extends AbstractController implements ControllerInterface
     }
 
     #[Route(
-        '/api/user/{id}',
-        requirements: ['id' => Requirement::UUID_V4],
+        '/api/user/{public_id}',
+        requirements: ['public_id' => Requirement::POSITIVE_INT],
         methods: ['PATCH']
     )]
     public function update(UserVO $userVO): JsonResponse
@@ -75,7 +75,7 @@ class UserController extends AbstractController implements ControllerInterface
     public function delete(UserVO $userVO): JsonResponse
     {
         return $this->facade
-            ->readResource($resourceVO)
+            ->deleteResource($userVO)
             ->render();
     }
 }

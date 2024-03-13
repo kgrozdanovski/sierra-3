@@ -16,6 +16,7 @@ use App\Kernel\Business\Transformer\CastTransformer;
 use App\Kernel\Service\Logger\Logger;
 use App\Kernel\Persistence\Doctrine\Audit\Reflector\EntityAttributeReflector;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
+use Symfony\Component\Uid\Uuid;
 
 #[AsEventListener(event: Events::postUpdate, method: 'postUpdate')]
 final readonly class EntityAuditPostUpdateListener
@@ -45,6 +46,14 @@ final readonly class EntityAuditPostUpdateListener
         $unitOfWork = $args->getObjectManager()->getUnitOfWork();
         $entityChangeSet = $unitOfWork->getEntityChangeSet($entity);
 
+        // Do not log changes to the metadata columns `modified_at` and `modified_by`
+        if (array_key_exists('modifiedAt', $entityChangeSet)) {
+            unset($entityChangeSet['modifiedAt']);
+        }
+        if (array_key_exists('modifiedBy', $entityChangeSet)) {
+            unset($entityChangeSet['modifiedBy']);
+        }
+
         foreach ($entityChangeSet as $propertyName => $changeSet) {
             $originalValueString = $this->castTransformer->toString($changeSet[0]);
             $updatedValueString  = $this->castTransformer->toString($changeSet[1]);
@@ -53,8 +62,11 @@ final readonly class EntityAuditPostUpdateListener
                 continue;
             }
 
+            // todo: get request id from request
+            $requestId = Uuid::fromString('9adf9850-c657-4776-a8bd-4a2e13cc9555');
+
             $auditEntity = (new $auditEntityName)
-                ->setRequestId($this->logger->getRequestId())
+                ->setRequestId($requestId)
                 ->setEntity($entity)
                 ->setPropertyName($propertyName)
                 ->setOriginalValueString($originalValueString)
