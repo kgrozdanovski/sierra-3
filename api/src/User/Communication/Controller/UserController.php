@@ -54,4 +54,28 @@ class UserController extends AbstractController implements ControllerInterface
             ->readCollection($collectionVO)
             ->render();
     }
+
+    #[Route(
+        '/api/user/{id}',
+        requirements: ['id' => Requirement::UUID_V4],
+        methods: ['PATCH']
+    )]
+    public function update(UserVO $userVO): JsonResponse
+    {
+        return $this->facade
+            ->updateResource($userVO)
+            ->render();
+    }
+
+    #[Route(
+        '/api/user/{id}',
+        requirements: ['id' => Requirement::UUID_V4],
+        methods: ['DELETE']
+    )]
+    public function delete(UserVO $userVO): JsonResponse
+    {
+        return $this->facade
+            ->readResource($resourceVO)
+            ->render();
+    }
 }

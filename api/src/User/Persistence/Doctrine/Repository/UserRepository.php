@@ -86,6 +86,22 @@ class UserRepository extends AbstractEntityRepository implements PasswordUpgrade
     }
 
     /**
+     * @param User $entity
+     * @param bool $flush
+     *
+     * @return void
+     */
+    public function softRemove(User $entity, bool $flush = false): void
+    {
+        $entity->setDeleted(true);
+        $this->getEntityManager()->persist($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+    /**
      * @param QueryBuilder $queryBuilder
      * @param array $filters
      *
@@ -94,7 +110,7 @@ class UserRepository extends AbstractEntityRepository implements PasswordUpgrade
     protected function compileQueryBuilderWhereClause(QueryBuilder $queryBuilder, array $filters): void
     {
         if (isset($filters['email'])) {
-            $queryBuilder->andWhere(self::TABLE_ALIAS.'.email LIKE :email');
+            $queryBuilder->andWhere(self::TABLE_ALIAS.' . email LIKE :email');
             $queryBuilder->setParameter('email', '%' . $filters['email'] . '%');
         }
 

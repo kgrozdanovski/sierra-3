@@ -60,9 +60,10 @@ class UserRoleRepository extends AbstractEntityRepository
      *
      * @return void
      */
-    public function remove(UserRole $entity, bool $flush = false): void
+    public function softRemove(UserRole $entity, bool $flush = false): void
     {
-        $this->getEntityManager()->remove($entity);
+        $entity->setDeleted(true);
+        $this->getEntityManager()->persist($entity);
 
         if ($flush) {
             $this->getEntityManager()->flush();
@@ -75,10 +76,10 @@ class UserRoleRepository extends AbstractEntityRepository
      *
      * @return void
      */
-    public function removeCollection(UserRoleCollection $collection, bool $flush = false): void
+    public function softRemoveCollection(UserRoleCollection $collection, bool $flush = false): void
     {
         foreach ($collection as $item) {
-            $this->getEntityManager()->remove($item);
+            $this->softRemove($item);
         }
 
         if ($flush) {
