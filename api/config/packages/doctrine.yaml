@@ -16,6 +16,12 @@ doctrine:
                 dir: '%kernel.project_dir%/src/User/Persistence/Doctrine/Entity'
                 prefix: 'App\User\Persistence\Doctrine\Entity'
                 alias: App\User
+            App\AccessToken:
+                is_bundle: false
+                type: attribute
+                dir: '%kernel.project_dir%/src/Auth/Persistence/Doctrine/Entity'
+                prefix: 'App\Auth\Persistence\Doctrine\Entity'
+                alias: App\AccessToken
 
 when@test:
     doctrine:

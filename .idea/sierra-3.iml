@@ -4,8 +4,6 @@
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/api/src" isTestSource="false" packagePrefix="App\" />
       <sourceFolder url="file://$MODULE_DIR$/api/tests" isTestSource="true" packagePrefix="App\Tests\" />
-      <sourceFolder url="file://$MODULE_DIR$/api/api/src" isTestSource="false" packagePrefix="App\" />
-      <sourceFolder url="file://$MODULE_DIR$/api/api/tests" isTestSource="true" packagePrefix="App\Tests\" />
       <excludeFolder url="file://$MODULE_DIR$/api/vendor/composer" />
       <excludeFolder url="file://$MODULE_DIR$/api/vendor/doctrine/annotations" />
       <excludeFolder url="file://$MODULE_DIR$/api/vendor/doctrine/cache" />
@@ -222,6 +220,7 @@
       <excludeFolder url="file://$MODULE_DIR$/api/api/vendor/symfony/var-exporter" />
       <excludeFolder url="file://$MODULE_DIR$/api/api/vendor/symfony/yaml" />
       <excludeFolder url="file://$MODULE_DIR$/api/api/vendor/webmozart/assert" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/symfony/rate-limiter" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

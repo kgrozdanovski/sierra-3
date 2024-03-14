@@ -9,9 +9,11 @@ use App\User\Persistence\Doctrine\Entity\User;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @extends AbstractEntityRepository<User>
@@ -23,7 +25,7 @@ use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
  */
 class UserRepository extends AbstractEntityRepository implements PasswordUpgraderInterface
 {
-    protected const TABLE_ALIAS = 'u';
+    protected const string TABLE_ALIAS = 'u';
 
     public function __construct(ManagerRegistry $registry)
     {

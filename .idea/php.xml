@@ -228,6 +228,7 @@
       <path value="$PROJECT_DIR$/api/api/vendor/php-parallel-lint/php-parallel-lint" />
       <path value="$PROJECT_DIR$/api/api/vendor/phpdocumentor/reflection-docblock" />
       <path value="$PROJECT_DIR$/api/api/vendor/phpdocumentor/reflection-common" />
+      <path value="$PROJECT_DIR$/api/vendor/symfony/rate-limiter" />
     </include_path>
   </component>
   <component name="PhpInterpreters">

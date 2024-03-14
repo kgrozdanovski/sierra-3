@@ -19,7 +19,7 @@ RUN apt-get install -qy libpng-dev libjpeg-dev gettext libzip-dev zip libpq-dev 
 # Install PHP extensions
 RUN docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
     && docker-php-ext-configure intl \
-    && docker-php-ext-install gd zip bcmath gettext pdo pdo_pgsql pgsql intl
+    && docker-php-ext-install gd zip bcmath gettext pdo pdo_pgsql pgsql intl sockets
 
 # Install PECL extensions
 RUN pecl install excimer && docker-php-ext-enable excimer # Needed by Sentry.io for performance monitoring
@@ -43,6 +43,22 @@ RUN composer dump-autoload --optimize
 
 # Use custom php.ini
 COPY ./infrastructure/api/environment/${app_env}/php.ini /usr/local/etc/php/php.ini
+
+WORKDIR /etc/ssl/private
+
+# Set permissions for SSL certificates
+# Docker needs R/W permissions because it is syncing the files with the host
+RUN chmod -R 777 /etc/ssl
+
+# Generate OpenSSL certificates for signing signatures
+RUN openssl genrsa -des3 -passout pass:x -out server.pass.key 2048 \
+    && openssl rsa -passin pass:x -in server.pass.key -out server.key \
+    && rm server.pass.key \
+    && openssl req -new -key server.key -out server.csr \
+      -subj "/C=US/ST=./L=./O=Sierra-3/OU=IT Department/CN=api.sierra.local" \
+    && openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt
+
+WORKDIR /var/www/html
 
 # Xdebug support (enable only for dev env)
 # Make sure to install a specific Xdebug version compatible with the PHP version (https://xdebug.org/docs/compat)
