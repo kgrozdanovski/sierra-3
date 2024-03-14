@@ -6,8 +6,10 @@ use App\Kernel\Persistence\Doctrine\Entity\BlameAuditInterface;
 use App\Kernel\Persistence\Doctrine\Entity\BlameAuditTrait;
 use App\Kernel\Persistence\Doctrine\Entity\TimestampAuditInterface;
 use App\Kernel\Persistence\Doctrine\Entity\TimestampAuditTrait;
+use App\Kernel\Persistence\Doctrine\Generator\ShortIdGenerator;
 use App\Kernel\Persistence\Doctrine\Generator\UuidV4Generator;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -33,6 +35,12 @@ class User implements EntityAuditInterface, UserInterface, PasswordAuthenticated
     #[ORM\CustomIdGenerator(class: UuidV4Generator::class)]
     #[Groups(['user_resource', 'user_collection'])]
     private ?UuidV4 $id = null;
+    
+    #[ORM\Column(type: Types::STRING, length: 7, unique: true)]
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+    #[ORM\CustomIdGenerator(class: ShortIdGenerator::class)]
+    #[Groups(['user_resource', 'user_collection'])]
+    private ?string $publicId = null;
 
     #[ORM\Column(length: 180, unique: true)]
     #[Groups(['user_resource', 'user_collection'])]
@@ -55,6 +63,18 @@ class User implements EntityAuditInterface, UserInterface, PasswordAuthenticated
     public function getId(): ?string
     {
         return (string) $this->id->toRfc4122();
+    }
+    
+    public function getPublicId(): ?string
+    {
+        return $this->publicId;
+    }
+    
+    public function setPublicId(string $publicId): self
+    {
+        $this->publicId = $publicId;
+        
+        return $this;
     }
 
     public function getEmail(): ?string

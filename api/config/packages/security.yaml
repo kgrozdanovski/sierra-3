@@ -5,24 +5,50 @@ security:
             algorithm: sodium
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
-        # used to reload user from session & other features (e.g. switch_user)
+        # Used to reload user from session & other features (e.g. switch_user)
         app_user_provider:
             entity:
-                class: App\Entity\User
-                property: email
+                class: 'App\User\Persistence\Doctrine\Entity\User'
+                property: 'email'
+    # https://symfony.com/doc/current/security.html#the-firewall
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
+            # Path is not login
+            pattern: ^/(?!login)
+
+            stateless: true
+
+            # The lazy anonymous mode prevents the session from being started if there is no need for authorization
+            # (i.e. explicit check for a user privilege). This is important to keep requests cacheable.
             lazy: true
+
             provider: app_user_provider
 
-            # activate different ways to authenticate
-            # https://symfony.com/doc/current/security.html#the-firewall
+            # Define login controller to handle successful authentication
+            json_login:
+                # auth_login is a route alias
+                check_path: auth_login
+                # Resolve the user from these JSON fields in the request
+                username_path: email
+                password_path: password
 
-            # https://symfony.com/doc/current/security/impersonating_user.html
-            # switch_user: true
+            # Rate Limiter (symfony/rate-limiter) configuration
+
+            # Configure the maximum login attempts
+            login_throttling:
+                max_attempts: 5 # per minute ...
+                interval: '15 minutes'
+
+            # Configure the custom Authenticator middleware for the token-based authentication
+            custom_authenticators:
+                - 'App\Kernel\Business\Security\Authenticator\BearerTokenAuthenticator'
+
+            # Define logout controller to handle successful logout
+            logout:
+                path: auth_logout
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
