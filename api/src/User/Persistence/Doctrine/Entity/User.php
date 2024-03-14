@@ -6,9 +6,9 @@ use App\Kernel\Persistence\Doctrine\Entity\BlameAuditInterface;
 use App\Kernel\Persistence\Doctrine\Entity\BlameAuditTrait;
 use App\Kernel\Persistence\Doctrine\Entity\TimestampAuditInterface;
 use App\Kernel\Persistence\Doctrine\Entity\TimestampAuditTrait;
+use App\Kernel\Persistence\Doctrine\Generator\UuidV4Generator;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -18,7 +18,7 @@ use App\Kernel\Persistence\Doctrine\Audit\Attribute as Audit;
 use App\User\Persistence\Doctrine\Collection\UserRoleCollection;
 use App\User\Persistence\Doctrine\Repository\UserRepository;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Uid\UuidV4;
 
 #[Audit\Entity(name: UserAudit::class)]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -30,9 +30,9 @@ class User implements EntityAuditInterface, UserInterface, PasswordAuthenticated
     #[ORM\Id]
     #[ORM\Column(type: UuidType::NAME, unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
-    #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
+    #[ORM\CustomIdGenerator(class: UuidV4Generator::class)]
     #[Groups(['user_resource', 'user_collection'])]
-    private ?Uuid $id = null;
+    private ?UuidV4 $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
     #[Groups(['user_resource', 'user_collection'])]
