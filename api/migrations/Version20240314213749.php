@@ -38,6 +38,12 @@ final class Version20240314213749 extends AbstractMigration
                 RETURN short_id;
             END;
             $$ LANGUAGE plpgsql;");
+
+        // Generate short IDs for existing users
+        $this->addSql("UPDATE users SET public_id = fn_generate_short_id('users') WHERE public_id IS NULL");
+
+        // Make the public_id column NOT NULL
+        $this->addSql('ALTER TABLE "users" ALTER public_id SET NOT NULL');
     }
 
     public function down(Schema $schema): void

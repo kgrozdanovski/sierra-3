@@ -94,17 +94,17 @@ abstract class AbstractResponseVO implements ValueObjectInterface
         return (new EntityContextBuilder())
             ->withDeepObjectToPopulate(true)
             ->withCircularReferenceHandler(function ($object) {
-                return method_exists($object, 'getId') ? ['id' => $object->getId()] : null;
+                return $this->getDefaultProperty($object);
             })
             ->withMaxDepthHandler(function ($attributeValue) {
                 return match (gettype($attributeValue)) {
-                    'object' => method_exists($attributeValue, 'getId') ? ['id' => $attributeValue->getId()] : null,
+                    'object' => $this->getDefaultProperty($attributeValue),
                     'array' => null,
-                    default => $attributeValue,
+                    default => $attributeValue
                 };
             })
             ->withMaxTreeDepthHandler(function ($object) {
-                return method_exists($object, 'getId') ? ['id' => $object->getId()] : null;
+                return $this->getDefaultProperty($object);
             })
             ->withDateTimeFormat('Y-m-d H:i:s') // todo: move to class constant
             ->withCircularReferenceLimit(1)
@@ -130,6 +130,14 @@ abstract class AbstractResponseVO implements ValueObjectInterface
     }
 
     /**
+     * @return Request
+     */
+    public function getRequest(): Request
+    {
+        return new Request();
+    }
+
+    /**
      * @param string $action
      * @param array $parameters
      * @return JsonResponse
@@ -137,10 +145,21 @@ abstract class AbstractResponseVO implements ValueObjectInterface
     abstract public function render(string $action = '', array $parameters = []): JsonResponse;
 
     /**
-     * @return Request
+     * Returns the default property for the given object.
+     *
+     * For use with circular reference or max depth handlers.
+     *
+     * @param object $object
+     *
+     * @return array|null
      */
-    public function getRequest(): Request
+    private function getDefaultProperty(object $object): ?array
     {
-        return new Request();
+        // Prefer 'public_id' over 'id' for public facing entities
+        if (method_exists($object, 'getPublicId')) {
+            return ['public_id' => $object->getPublicId()];
+        } else {
+            return method_exists($object, 'getId') ? ['id' => $object->getId()] : null;
+        }
     }
 }

@@ -36,8 +36,8 @@ class UserController extends AbstractController implements ControllerInterface
     }
 
     #[Route(
-        '/api/user/{id}',
-        requirements: ['id' => Requirement::UUID_V4],
+        '/api/user/{public_id}',
+        requirements: ['public_id' => Requirement::POSITIVE_INT],
         methods: ['GET']
     )]
     public function resource(ResourceVO $resourceVO): JsonResponse

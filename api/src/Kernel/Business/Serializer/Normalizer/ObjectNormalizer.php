@@ -1,5 +1,12 @@
 <?php
 
+/*
+ * (c) Kristijan Grozdanovski <kgrozdanovski7@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace App\Kernel\Business\Serializer\Normalizer;
 
 use App\Kernel\Business\Serializer\Normalizer\Exception\MaxTreeDepthException;
@@ -20,8 +27,10 @@ use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
  * The built-in ObjectNormalizer from Symfony only supports a MAX_DEPTH attribute
  * which handles circular references to the same class.
  *
- * <br>
  * Inspired by the ObjectNormalizer implementation in [zusam/zusam](https://github.com/zusam/zusam)
+ *
+ * @class ObjectNormalizer
+ * @package App\Kernel\Business\Serializer\Normalizer
  */
 class ObjectNormalizer extends AbstractObjectNormalizer
 {
@@ -65,14 +74,27 @@ class ObjectNormalizer extends AbstractObjectNormalizer
         array $defaultContext = []
     ) {
         if (!class_exists(PropertyAccess::class)) {
-            throw new LogicException('The ObjectNormalizer class requires the "PropertyAccess" component. Try running "composer require symfony/property-access".');
+            throw new LogicException(
+                'The ObjectNormalizer class requires the "PropertyAccess" component. 
+                Try running "composer require symfony/property-access".'
+            );
         }
 
-        parent::__construct($classMetadataFactory, $nameConverter, $propertyTypeExtractor, $classDiscriminatorResolver, $objectClassResolver, $defaultContext);
+        parent::__construct(
+            $classMetadataFactory,
+            $nameConverter,
+            $propertyTypeExtractor,
+            $classDiscriminatorResolver,
+            $objectClassResolver,
+            $defaultContext
+        );
 
         $this->propertyAccessor = $propertyAccessor ?: PropertyAccess::createPropertyAccessor();
 
-        $this->objectClassResolver = ($objectClassResolver ?? static fn ($class) => \is_object($class) ? $class::class : $class)(...);
+        $this->objectClassResolver = (
+            $objectClassResolver
+            ?? static fn ($class) => \is_object($class) ? $class::class : $class
+        )(...);
 
         $this->defaultContext[self::TREE_DEPTH_LIMIT] = 1;
     }
@@ -124,7 +146,10 @@ class ObjectNormalizer extends AbstractObjectNormalizer
                 }
             }
 
-            if (null !== $attributeName && $this->isAllowedAttribute($object, $attributeName, $format, $context)) {
+            if (
+                null !== $attributeName
+                && $this->isAllowedAttribute($object, $attributeName, $format, $context)
+            ) {
                 $attributes[$attributeName] = true;
             }
         }
@@ -135,7 +160,10 @@ class ObjectNormalizer extends AbstractObjectNormalizer
                 continue;
             }
 
-            if ($reflProperty->isStatic() || !$this->isAllowedAttribute($object, $reflProperty->name, $format, $context)) {
+            if (
+                $reflProperty->isStatic()
+                || !$this->isAllowedAttribute($object, $reflProperty->name, $format, $context)
+            ) {
                 continue;
             }
 
@@ -145,8 +173,12 @@ class ObjectNormalizer extends AbstractObjectNormalizer
         return array_keys($attributes);
     }
 
-    protected function getAttributeValue(object $object, string $attribute, ?string $format = null, array $context = []): mixed
-    {
+    protected function getAttributeValue(
+        object $object,
+        string $attribute,
+        ?string $format = null,
+        array $context = []
+    ): mixed {
         $mapping = $this->classDiscriminatorResolver?->getMappingForMappedObject($object);
 
         return $attribute === $mapping?->getTypeProperty()
@@ -154,8 +186,13 @@ class ObjectNormalizer extends AbstractObjectNormalizer
             : $this->propertyAccessor->getValue($object, $attribute);
     }
 
-    protected function setAttributeValue(object $object, string $attribute, mixed $value, ?string $format = null, array $context = []): void
-    {
+    protected function setAttributeValue(
+        object $object,
+        string $attribute,
+        mixed $value,
+        ?string $format = null,
+        array $context = []
+    ): void {
         try {
             $this->propertyAccessor->setValue($object, $attribute, $value);
         } catch (NoSuchPropertyException) {
@@ -225,7 +262,9 @@ class ObjectNormalizer extends AbstractObjectNormalizer
             return false;
         }
 
-        $treeDepthLimit = $context[self::TREE_DEPTH_LIMIT] ?? $this->defaultContext[self::TREE_DEPTH_LIMIT] ?? $this->treeDepthLimit;
+        $treeDepthLimit = $context[self::TREE_DEPTH_LIMIT]
+            ?? $this->defaultContext[self::TREE_DEPTH_LIMIT]
+            ?? $this->treeDepthLimit;
         if (isset($context[self::TREE_DEPTH_LIMIT_COUNTERS])) {
             if ($context[self::TREE_DEPTH_LIMIT_COUNTERS] >= $treeDepthLimit) {
                 unset($context[self::TREE_DEPTH_LIMIT_COUNTERS]);
@@ -264,6 +303,10 @@ class ObjectNormalizer extends AbstractObjectNormalizer
             return $maxTreeDepthHandler($object, $format, $context);
         }
 
-        throw new MaxTreeDepthException(sprintf('Max tree depth has been reached while serializing the object of class "%s" (configured limit: %d)', \get_class($object), $this->treeDepthLimit));
+        throw new MaxTreeDepthException(sprintf(
+            'Max tree depth has been reached while serializing the object of class "%s" (configured limit: %d)',
+            \get_class($object),
+            $this->treeDepthLimit
+        ));
     }
 }
