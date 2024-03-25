@@ -18,16 +18,18 @@ readonly class UserReader implements UserReaderInterface
      */
     public function read(ResourceVO $resourceVO): ResourceResponseVO
     {
-        $customer = $this->userRepository->find(
-            $resourceVO->getId()
-        );
+        $user = $this->userRepository->findOneBy([
+            'publicId' => $resourceVO->getPublicId()
+        ]);
 
-        if ($customer === null) {
-            throw new ResourceNotFoundException('Address resource with ID '.$resourceVO->getId().' was not found.');
+        if ($user === null) {
+            throw new ResourceNotFoundException(
+                'Address resource with ID '.$resourceVO->getPublicId().' was not found.'
+            );
         }
 
         return (new ResourceResponseVO())
-            ->setData($customer)
+            ->setData($user)
             ->setSerializerGroups([
                 'user_resource',
                 'metadata'

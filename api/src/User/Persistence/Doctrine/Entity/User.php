@@ -34,7 +34,6 @@ class User implements EntityAuditInterface, UserInterface, PasswordAuthenticated
     #[ORM\Column(type: UuidType::NAME, unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: UuidV4Generator::class)]
-    #[Groups(['user_resource', 'user_collection'])]
     private ?UuidV4 $id = null;
     
     #[ORM\Column(type: Types::STRING, length: 7, unique: true)]

@@ -15,20 +15,15 @@ class ResourceVO extends AbstractVO
 {
     use CriteriaAwareTrait;
 
-    protected string $id;
+    protected string $publicId;
 
-    public function getId(): string
+    public function getPublicId(): string
     {
-        return $this->id;
+        return $this->publicId;
     }
 
-    public function setId(string $id): void
+    public function setPublicId(string $publicId): void
     {
-        $this->id = $id;
-    }
-
-    public function setIdAsLoggedInUser(): void
-    {
-        $this->id = $this->getUserContext()->getId();
+        $this->publicId = $publicId;
     }
 }
