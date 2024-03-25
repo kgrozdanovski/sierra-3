@@ -27,22 +27,22 @@ interface CryptographyInterface
     public function verify(string $secret, string $hash): bool;
 
     /**
-     * Encrypt a string using the RSA algorithm and the private key.
+     * Encrypt a string using a secret key.
      *
      * @param string $data
      *
      * @return string
      */
-    public function sslEncrypt(string $data): string;
+    public function encrypt(string $data): string;
 
     /**
-     * Decipher a string using the RSA algorithm and the private key.
+     * Decipher a string using a secret key.
      *
      * @param string $encrypted
      *
      * @return string
      */
-    public function sslDecrypt(string $encrypted): string;
+    public function decrypt(string $encrypted): string;
 
     /**
      * @param string $value

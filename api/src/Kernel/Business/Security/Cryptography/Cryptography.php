@@ -30,7 +30,7 @@ readonly class Cryptography implements CryptographyInterface
     /**
      * {@inheritDoc}
      */
-    public function sslEncrypt(string $data): string
+    public function encrypt(string $data): string
     {
         $encrypted = '';
 
@@ -38,31 +38,30 @@ readonly class Cryptography implements CryptographyInterface
 
         // Load the private key from file
         $fileStream = fopen($privateKeyFilename, 'r');
-        $privateKeyContent = fread($fileStream, 8192);
+        $privateKeyContent = fread($fileStream, 64);
         fclose($fileStream);
 
-        $privateKey = openssl_get_privatekey($privateKeyContent);
+        // Decode the base64 key to get the raw binary key
+        $privateKeyDecoded = base64_decode($privateKeyContent);
 
-        // Compute the signature
-        openssl_private_encrypt($data, $encrypted, $privateKey);
+        // Specify the method of encryption, e.g., AES-256-CBC
+        $method = 'aes-256-cbc';    // todo: move to settings
 
-        /*
-         * Free the key from memory
-         *
-         * PHP 8 deprecates openssl_free_key (actually openssl_pkey_free which it aliases) and automatically
-         * destroys the key instance when it goes out of scope.
-         */
-        if (PHP_VERSION_ID < 80000) {
-            openssl_free_key($privateKey);
-        }
+        // Generate an initialization vector (IV) for the encryption
+        $ivLength = openssl_cipher_iv_length($method);
+        $iv = openssl_random_pseudo_bytes($ivLength);
 
-        return $encrypted;
+        // Encrypt the data
+        $encryptedData = openssl_encrypt($data, $method, $privateKeyDecoded, OPENSSL_RAW_DATA, $iv);
+
+        // Return the IV concatenated with the encrypted data
+        return $iv . $encryptedData;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function sslDecrypt(string $encrypted): string
+    public function decrypt(string $encrypted): string
     {
         $decrypted = '';
 
@@ -70,27 +69,27 @@ readonly class Cryptography implements CryptographyInterface
 
         // Load the private key from file
         $fileStream = fopen($privateKeyFilename, 'r');
-        $privateKeyContent = fread($fileStream, 8192);
+        $privateKeyContent = fread($fileStream, 64);
         fclose($fileStream);
 
-        $privateKey = openssl_get_privatekey($privateKeyContent);
+        // Decode the base64 key to get the raw binary key
+        $privateKeyDecoded = base64_decode($privateKeyContent);
 
-        $success = openssl_private_decrypt($encrypted, $decrypted, $privateKey);
-        if (!$success) {
+        // Specify the method of encryption, e.g., AES-256-CBC
+        $method = 'aes-256-cbc';    // todo: move to settings
+
+        // Extract the initialization vector (IV) from the encrypted data
+        $ivLength = openssl_cipher_iv_length($method);
+        $iv = substr($encrypted, 0, $ivLength);
+
+        // Encrypt the data
+        $decrypted = openssl_decrypt($encrypted, $method, $privateKeyDecoded, OPENSSL_RAW_DATA, $iv);
+        if (!$decrypted) {
             throw new \Exception('Failed to decrypt the access token.');
         }
 
-        /*
-         * Free the key from memory
-         *
-         * PHP 8 deprecates openssl_free_key (actually openssl_pkey_free which it aliases) and automatically
-         * destroys the key instance when it goes out of scope.
-         */
-        if (PHP_VERSION_ID < 80000) {
-            openssl_free_key($privateKey);
-        }
-
-        return $decrypted;
+        // Remove the IV from the decrypted data
+        return substr($decrypted, $ivLength);
     }
 
     /**

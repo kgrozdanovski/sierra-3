@@ -48,7 +48,7 @@ WORKDIR /etc/ssl/private
 
 # Set permissions for SSL certificates
 # Docker needs R/W permissions because it is syncing the files with the host
-RUN chmod -R 777 /etc/ssl
+RUN chmod -R 755 /etc/ssl
 
 # Generate OpenSSL certificates for signing signatures
 RUN openssl genrsa -des3 -passout pass:x -out server.pass.key 2048 \
@@ -57,6 +57,12 @@ RUN openssl genrsa -des3 -passout pass:x -out server.pass.key 2048 \
     && openssl req -new -key server.key -out server.csr \
       -subj "/C=US/ST=./L=./O=Sierra-3/OU=IT Department/CN=api.sierra.local" \
     && openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt
+
+# Generate a symmetric key for signing token signatures
+RUN openssl rand -base64 32 > token.key
+
+# System user www-data needs read permissions on the token.key
+RUN chmod +r token.key
 
 WORKDIR /var/www/html
 

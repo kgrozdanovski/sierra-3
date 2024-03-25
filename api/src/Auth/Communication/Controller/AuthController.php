@@ -3,7 +3,6 @@
 namespace App\Auth\Communication\Controller;
 
 use App\Auth\Business\AuthFacade;
-use App\Auth\Persistence\Doctrine\Repository\AccessTokenRepository;
 use App\Kernel\Business\Security\Authenticator\BearerTokenAuthenticator;
 use App\Kernel\Business\ValueObject\CollectionVO;
 use App\Kernel\Business\ValueObject\ResourceVO;
@@ -46,12 +45,20 @@ class AuthController extends AbstractController implements ControllerInterface
         }
 
         // Fetch a token from the authenticator
-        $accessToken = $this->authenticator->createRawToken($user);
+        try {
+            $accessToken = $this->authenticator->createRawToken($user);
+        }
+        catch (\Exception $e) { // Make sure we do not expose any sensitive information
+            return $response
+                ->setMessage('Failed to create access token.')
+                ->setStatusCode(StatusCode::INTERNAL_ERROR)
+                ->render();
+        }
 
         return $response
             ->setMessage('Successfully logged in.')
             ->setData([
-                'user_id' => $user->getId(),
+                'user_id' => $user->getPublicId(),
                 'token' => $accessToken
             ])
             ->render();
