@@ -51,7 +51,7 @@ readonly class BearerTokenAuthenticator implements AuthenticatorInterface
      */
     #[\Override]
     public function supports(Request $request): ?bool
-    {return false;
+    {
         // Skip the login route
         if ($request->attributes->get('_route') === 'auth_login') {
             return false;
@@ -73,42 +73,40 @@ readonly class BearerTokenAuthenticator implements AuthenticatorInterface
 
         // Decode the token
         $token = $this->cryptography->urlSafeBase64Decode($token);
+        // Decrypt the token
+        $token = $this->cryptography->decrypt($token);
 
-        // Extract the user identifier from the token (first 7 digits)
-        $userPublicId = substr($token, 0, 7);
+        // Extract the user identifier (UUIDv4) from the token (first 36 digits)
+        $userId = substr($token, 0, 36);
         // The rest of the token is the token base
-        $tokenBase = substr($token, 7);
+        $tokenBase = substr($token, 36);
 
-        // Get the user from the public ID
-        $user = $this->userRepository->findOneBy(['publicId' => $userPublicId]);
+        // Get the user from the database
+        $user = $this->userRepository->find($userId);
 
         // Verify the access token exists and fetch it
         $accessToken = $this->accessTokenRepository->findOneBy([
-            'user' => $user->getId(),
-            'deleted' => false
-        ]);
+            'user' => $user->getId()
+            //,'deleted' => false
+        ], ['createdAt' => 'DESC']);
 
         if ($accessToken === null) {
             throw new CustomUserMessageAuthenticationException('Invalid token.');
         }
-        // Verify the hash matches the stored value hashed
-        if (hash('sha3-224', $accessToken->getToken()) !== $tokenBase) {
+        // Verify the hash of the base matches the stored hash
+        if (hash('sha3-224', $tokenBase) !== $accessToken->getToken()) {
             throw new CustomUserMessageAuthenticationException('Invalid token.');
         }
         // Verify the access token has not expired, unless it's a non-expiring token
         if (!is_null($accessToken->getValidUntil())) {
-            if (strtotime($accessToken->getValidUntil()) < time()) {
+            if ($accessToken->getValidUntil()->getTimestamp() < time()) {
                 throw new CustomUserMessageAuthenticationException('Token expired.');
             }
         }
 
-        // Extract the user ID from the token
-        $userId = $this->cryptography->sslDecrypt($this->cryptography->urlSafeBase64Decode($token));
-        // Get the User object from the user ID
-        $user = $this->userRepository->find($userId);
-
         // Create a Symfony Passport with the user badge
-        $passport = new SelfValidatingPassport(new UserBadge($userId), []);
+        // Note: $userIdentifier is matched against whatever User property you define in the security.yaml User Provider
+        $passport = new SelfValidatingPassport(new UserBadge($user->getEmail()), []);
         // Set custom attributes to the passport
         $passport->setAttribute('roles', $user->getRoles());
 
@@ -121,7 +119,8 @@ readonly class BearerTokenAuthenticator implements AuthenticatorInterface
         // Get the user from the passport
         $user = $passport->getUser();
         // Get the full User entity from the user object
-        $userEntity = $this->userRepository->find($user->getUserIdentifier());
+        // Note: $userIdentifier is matched against whatever User property you define in the security.yaml User Provider
+        $userEntity = $this->userRepository->findOneBy(['email' => $user->getUserIdentifier()]);
 
         // Create the raw token value
         $token = $this->createRawToken($userEntity);
@@ -162,7 +161,9 @@ readonly class BearerTokenAuthenticator implements AuthenticatorInterface
 
     /**
      * @param User $userEntity
+     *
      * @return string
+     * @throws \Exception
      */
     public function createRawToken(User $userEntity): string
     {
@@ -170,26 +171,26 @@ readonly class BearerTokenAuthenticator implements AuthenticatorInterface
         $secureRandomEngine = new Secure();
         $randomizer = new Randomizer($secureRandomEngine);
         $bytes = $randomizer->getBytes(12);
+
         // Convert the bytes to a readable hexadecimal string
         $tokenBase = bin2hex($bytes);   // this will be stored in the database
-
-        // Generate an SHA-3 encrypted string for the request
-        $hashedToken = hash('sha3-224', $tokenBase);
-
-        // Form a token with the user's public ID and the hashed token
-        $token = $userEntity->getPublicId() . $hashedToken;
+        // Form a token with the user's internal UUID and the hashed token
+        $token = $this->cryptography->encrypt($userEntity->getId() . $tokenBase);
         // Return a URL-safe base64 encoded hash
         $token = $this->cryptography->urlSafeBase64Encode($token);
 
-        // Delete all previous access tokens for this user
+        // Soft-delete all previous access tokens for this user
         //$this->accessTokenRepository->softDeleteBy(['user_id' => $userEntity->getId()]);
 
         $validUntil = \DateTimeImmutable::createFromMutable(new \DateTime('now +1 hour'));
 
+        // Generate SHA-3 hash of the token base for secure storage
+        $hashedTokenBase = hash('sha3-224', $tokenBase);
+
         // Save the non-hashed token base to the database with the configured expiration time
         $accessToken = (new AccessToken())
             ->setUser($userEntity)
-            ->setToken($tokenBase)
+            ->setToken($hashedTokenBase)
             ->setValidUntil($validUntil);
         $this->accessTokenRepository->save($accessToken, true);
 

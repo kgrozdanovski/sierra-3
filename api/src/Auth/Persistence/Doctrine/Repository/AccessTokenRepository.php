@@ -46,4 +46,25 @@ class AccessTokenRepository extends AbstractEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+
+    public function softDeleteBy(array $criteria, bool $flush = false): void
+    {
+        $queryBuilder = $this->createQueryBuilder('at');
+        $queryBuilder->update(AccessToken::class, 'at')
+            ->set('at.deleted', ':deleted')
+            ->setParameter('deleted', 1)
+            ->where($queryBuilder->expr()->eq('at.deleted', 0));
+
+        // Dynamically add criteria to the query
+        foreach ($criteria as $key => $value) {
+            $queryBuilder->andWhere($queryBuilder->expr()->eq('at.' . $key, ':' . $key));
+            $queryBuilder->setParameter($key, $value);
+        }
+
+        $queryBuilder->getQuery()->execute();
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
 }
