@@ -69,10 +69,10 @@ readonly class BearerTokenAuthenticator implements AuthenticatorInterface
         }
 
         // Get the value after "Bearer "
-        $token = substr($token, 7);
+        $tokenEncoded = substr($token, 7);
 
         // Decode the token
-        $token = $this->cryptography->urlSafeBase64Decode($token);
+        $token = $this->cryptography->urlSafeBase64Decode($tokenEncoded);
         // Decrypt the token
         $token = $this->cryptography->decrypt($token);
 
@@ -109,10 +109,23 @@ readonly class BearerTokenAuthenticator implements AuthenticatorInterface
         $passport = new SelfValidatingPassport(new UserBadge($user->getEmail()), []);
         // Set custom attributes to the passport
         $passport->setAttribute('roles', $user->getRoles());
+        // Set the token to the passport
+        $passport->setAttribute('token', $tokenEncoded);
 
         return $passport;
     }
 
+    /**
+     * Create a Token object from the Passport object containing the authenticated user.
+     *
+     * Note: this is called after every successful authentication.
+     *
+     * @param Passport $passport
+     * @param string $firewallName
+     *
+     * @return TokenInterface
+     * @throws \Exception
+     */
     #[\Override]
     public function createToken(Passport $passport, string $firewallName): TokenInterface
     {
@@ -122,8 +135,8 @@ readonly class BearerTokenAuthenticator implements AuthenticatorInterface
         // Note: $userIdentifier is matched against whatever User property you define in the security.yaml User Provider
         $userEntity = $this->userRepository->findOneBy(['email' => $user->getUserIdentifier()]);
 
-        // Create the raw token value
-        $token = $this->createRawToken($userEntity);
+        // Retrieve the token from the passport
+        $token = $passport->getAttribute('token');
 
         $bearerToken = new BearerToken($token, $user->getRoles());
         $bearerToken->setUser($userEntity);
