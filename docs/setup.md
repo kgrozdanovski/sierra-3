@@ -29,6 +29,9 @@ Hyper-V and enable WSL2 through Windows Features before installing Docker.
     docker build -t sierra/test -f ./infrastructure/test/Dockerfile .
    ```
    
+   > Note: Building the `sierra/test` image will also append an ENV variable to your `.env` file. This is necessary
+   > due to Docker's limitations on dynamic ENV assignments within Dockerfiles.
+   
    > Note: If building the `sierra/cron` image fails with
    > ```shell
    > process "/bin/sh -c /usr/bin/crontab /etc/cron.d/crontab" did not complete successfully
