@@ -8,6 +8,7 @@ use App\Kernel\Persistence\Doctrine\Entity\TimestampAuditInterface;
 use App\Kernel\Persistence\Doctrine\Entity\TimestampAuditTrait;
 use App\Kernel\Persistence\Doctrine\Generator\ShortIdGenerator;
 use App\Kernel\Persistence\Doctrine\Generator\UuidV4Generator;
+use App\Kernel\Persistence\Doctrine\Mapping\AppCustomGenerator;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -38,7 +39,7 @@ class User implements EntityAuditInterface, UserInterface, PasswordAuthenticated
     
     #[ORM\Column(type: Types::STRING, length: 7, unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
-    #[ORM\CustomIdGenerator(class: ShortIdGenerator::class)]
+    #[AppCustomGenerator(class: ShortIdGenerator::class)]
     #[Groups(['user_resource', 'user_collection'])]
     private ?string $publicId = null;
 

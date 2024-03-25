@@ -46,6 +46,10 @@ services:
             - !tagged_iterator { tag: app.kernel.dependency_injection.service_resolver }
 
     # Doctrine Event listeners
+    App\Kernel\Persistence\Doctrine\EventListener\CustomGeneratorPrePersistListener:
+        tags:
+            - { name: 'doctrine.event_listener', event: 'prePersist', priority: 499 }
+
     App\Kernel\Persistence\Doctrine\EventListener\BlameAuditPrePersistListener:
         tags:
             - { name: 'doctrine.event_listener', event: 'prePersist', priority: 500 }
