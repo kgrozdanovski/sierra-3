@@ -58,13 +58,10 @@ RUN openssl genrsa -des3 -passout pass:x -out server.pass.key 2048 \
       -subj "/C=US/ST=./L=./O=Sierra-3/OU=IT Department/CN=api.sierra.local" \
     && openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt
 
-# Generate a symmetric key for signing token signatures
-RUN openssl rand -base64 32 > token.key
-
-# System user www-data needs read permissions on the token.key
-RUN chmod +r token.key
-
 WORKDIR /var/www/html
+
+# Generate a symmetric key for signing token signatures
+RUN echo "USER_SIGNATURE_PRIVATE_KEY=$(openssl rand -base64 32)" >> .env
 
 # Xdebug support (enable only for dev env)
 # Make sure to install a specific Xdebug version compatible with the PHP version (https://xdebug.org/docs/compat)

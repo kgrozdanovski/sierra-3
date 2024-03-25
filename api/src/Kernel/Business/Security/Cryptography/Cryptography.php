@@ -34,15 +34,10 @@ readonly class Cryptography implements CryptographyInterface
     {
         $encrypted = '';
 
-        $privateKeyFilename = getenv('USER_SIGNATURE_PRIVATE_KEY_FILENAME');
-
-        // Load the private key from file
-        $fileStream = fopen($privateKeyFilename, 'r');
-        $privateKeyContent = fread($fileStream, 64);
-        fclose($fileStream);
+        $privateKey = getenv('USER_SIGNATURE_PRIVATE_KEY');
 
         // Decode the base64 key to get the raw binary key
-        $privateKeyDecoded = base64_decode($privateKeyContent);
+        $privateKeyDecoded = base64_decode($privateKey);
 
         // Specify the method of encryption, e.g., AES-256-CBC
         $method = 'aes-256-cbc';    // todo: move to settings
@@ -65,15 +60,10 @@ readonly class Cryptography implements CryptographyInterface
     {
         $decrypted = '';
 
-        $privateKeyFilename = getenv('USER_SIGNATURE_PRIVATE_KEY_FILENAME');
-
-        // Load the private key from file
-        $fileStream = fopen($privateKeyFilename, 'r');
-        $privateKeyContent = fread($fileStream, 64);
-        fclose($fileStream);
+        $privateKey = getenv('USER_SIGNATURE_PRIVATE_KEY');
 
         // Decode the base64 key to get the raw binary key
-        $privateKeyDecoded = base64_decode($privateKeyContent);
+        $privateKeyDecoded = base64_decode($privateKey);
 
         // Specify the method of encryption, e.g., AES-256-CBC
         $method = 'aes-256-cbc';    // todo: move to settings
