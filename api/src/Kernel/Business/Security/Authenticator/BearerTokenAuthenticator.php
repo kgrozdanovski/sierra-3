@@ -52,8 +52,10 @@ readonly class BearerTokenAuthenticator implements AuthenticatorInterface
     #[\Override]
     public function supports(Request $request): ?bool
     {
+        $requestRoute = $request->attributes->get('_route');
+
         // Skip the login route
-        if ($request->attributes->get('_route') === 'auth_login') {
+        if (in_array($requestRoute, ['auth_login', 'healthcheck'])) {
             return false;
         }
         return true;
