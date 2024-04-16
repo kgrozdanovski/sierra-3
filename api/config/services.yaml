@@ -32,6 +32,10 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
+    # Register the Logger service
+    App\Kernel\Service\Logger\Logger:
+        class: App\Kernel\Service\Logger\Logger
+
     # Set Argument Value Resolvers
     # Read more: https://symfony.com/doc/current/controller/value_resolver.html#controller-argument-value-resolver
     App\Kernel\Communication\HttpKernel\Controller\ValueObjectResolver:
