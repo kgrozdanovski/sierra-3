@@ -15,6 +15,7 @@ use App\Kernel\Communication\HttpFoundation\Response\ApiResponse;
 use App\Kernel\Communication\HttpFoundation\Type\StatusCode;
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use App\Kernel\Service\Logger\Logger;
@@ -30,10 +31,9 @@ use App\Kernel\Communication\HttpKernel\Exception\ValidationException;
 class ExceptionEventHandler implements EventSubscriberInterface
 {
     public function __construct(
-        protected Logger $logger,
+        protected readonly Logger $logger,
         protected EntityManagerInterface $entityManager
     ) {
-//        $this->logger = $logger->withChannel(self::class);
     }
 
     /**
@@ -91,7 +91,11 @@ class ExceptionEventHandler implements EventSubscriberInterface
                     ->render();
 
                 $event->setResponse($eventResponse);
-//                $this->logger->notice($throwable->getMessage(), LogCtx::throwable($throwable));
+
+                $this->logger->notice(
+                    'AccessDeniedHttpException: ' . $this->getDescriptionFromThrowable($throwable),
+                    $throwable->getTrace()
+                );
                 return;
             // 404
             case NotFoundHttpException::class:
@@ -129,7 +133,8 @@ class ExceptionEventHandler implements EventSubscriberInterface
                     ->render();
 
                 $event->setResponse($eventResponse);
-//                $this->logger->notice($throwable->getMessage(), LogCtx::throwable($throwable));
+                // Probably a developer mistake, pointing to client-api discordination
+                $this->logger->notice('A ValidationException has occurred.', $messages);
                 return;
             // 500
             default:
@@ -149,7 +154,10 @@ class ExceptionEventHandler implements EventSubscriberInterface
                     ->render();
 
                 $event->setResponse($eventResponse);
-//                $this->logger->emergency('Unhandled throwable: ' . $throwable->getMessage(), $logContext);
+                $this->logger->emergency(
+                    'Unhandled throwable: ' . $this->getDescriptionFromThrowable($throwable),
+                    $throwable->getTrace()
+                );
         }
     }
 
