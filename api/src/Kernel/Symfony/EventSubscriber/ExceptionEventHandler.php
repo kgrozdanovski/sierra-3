@@ -136,7 +136,7 @@ class ExceptionEventHandler implements EventSubscriberInterface
                 $message = $this->getDescriptionFromThrowable($throwable);
 
                 // Include extra data in development environments for quicker debugging
-                if ($_ENV['APP_DEBUG']) {
+                if (getenv('SIERRA_DEBUG')) {
                     $response->setData([
                         'error' => $message,
                         'trace' => $throwable->getTrace()
