@@ -10,6 +10,7 @@ when@dev:
                 path: "%kernel.logs_dir%/%kernel.environment%.log"
                 level: debug
                 channels: ["!event"]
+                formatter: monolog.formatter.extended_context
             console:
                 type: console
                 process_psr_3_messages: false
@@ -28,6 +29,7 @@ when@test:
                 type: stream
                 path: "%kernel.logs_dir%/%kernel.environment%.log"
                 level: debug
+                formatter: monolog.formatter.extended_context
 
 when@prod:
     monolog:
@@ -43,7 +45,7 @@ when@prod:
                 path: "%kernel.logs_dir%/%kernel.environment%.log"
                 level: warning
                 channels: [ "!event" ]
-                formatter: monolog.formatter.json
+                formatter: monolog.formatter.extended_context
             console:
                 type: rotating_file
                 path: "%kernel.logs_dir%/%kernel.environment%.log"
