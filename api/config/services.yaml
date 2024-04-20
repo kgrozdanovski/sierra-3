@@ -32,16 +32,18 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
-    # Register the Logger service
-    App\Kernel\Service\Logger\Logger:
-        class: App\Kernel\Service\Logger\Logger
-
     # Set Argument Value Resolvers
     # Read more: https://symfony.com/doc/current/controller/value_resolver.html#controller-argument-value-resolver
     App\Kernel\Communication\HttpKernel\Controller\ValueObjectResolver:
         tags:
             - controller.argument_value_resolver:
                   priority: 206
+
+    # Register a formatter that uses the extra data from the custom Processors
+    monolog.formatter.extended_context:
+        class: Monolog\Formatter\LineFormatter
+        arguments:
+            - "[%%datetime%%] %%channel%%.%%level_name%%: [%%extra.request_id%%] [%%extra.request_method%%] %%extra.request_uri%% FROM %%extra.user_id%%@%%extra.client_ip%% USING %%extra.user_agent%% : %%message%% %%context%%\n"
 
     # Inject all services tagged with app.kernel.dependency_injection.service_resolver as first argument
     # Read more: https://symfony.com/doc/current/service_container/tags.html#adding-additional-attributes-on-tags

@@ -18,7 +18,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use App\Kernel\Service\Logger\Logger;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -31,7 +30,7 @@ use App\Kernel\Communication\HttpKernel\Exception\ValidationException;
 class ExceptionEventHandler implements EventSubscriberInterface
 {
     public function __construct(
-        protected readonly Logger $logger,
+        protected readonly LoggerInterface $logger,
         protected EntityManagerInterface $entityManager
     ) {
     }
