@@ -49,11 +49,7 @@ abstract class AbstractResponseVO implements ValueObjectInterface
      */
     public function getNormalizedData(): array
     {
-        try {
-            return $this->getSerializer()->normalize($this->getData(), null, $this->getSerializerContext());
-        } catch (ExceptionInterface $exception) {
-            return [];
-        }
+        return $this->getSerializer()->normalize($this->getData(), null, $this->getSerializerContext());
     }
 
     /**
