@@ -69,3 +69,6 @@ volumes:
 networks:
   internal:
     driver: bridge
+    ipam:
+      config:
+        - subnet: "172.22.0.0/16"  # Specify the subnet for the network
