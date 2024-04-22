@@ -20,6 +20,9 @@ services:
       - "127.0.0.1:9000:9000" # Bind port 9000 for FastCGI pass
 
   nginx:
+    volumes:
+      # Self-signed SSL certificates are used only in the development environment
+      - "./infrastructure/nginx/environment/${APP_ENV:-dev}/ssl:/etc/nginx/ssl"
     extra_hosts:
       - "api.sierra.local:127.0.0.1"
       - "db.sierra.local:127.0.0.1"
