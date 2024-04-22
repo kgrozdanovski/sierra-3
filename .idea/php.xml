@@ -312,6 +312,24 @@
       </interpreter>
     </phpInfoCache>
   </component>
+  <component name="PhpProjectServersManager">
+    <servers>
+      <server host="api.sierra.local" id="91633f01-79ad-4a3d-8165-3cb8917b021e" name="api.sierra.local" port="443" use_path_mappings="true">
+        <path_mappings>
+          <mapping local-root="$PROJECT_DIR$/api" remote-root="/var/ww/html" />
+          <mapping local-root="$PROJECT_DIR$/api/bin" remote-root="/var/www/html/bin" />
+          <mapping local-root="$PROJECT_DIR$/api/config" remote-root="/var/www/html/config" />
+          <mapping local-root="$PROJECT_DIR$/api/migrations" remote-root="/var/www/html/migrations" />
+          <mapping local-root="$PROJECT_DIR$/api/public" remote-root="/var/www/html/public" />
+          <mapping local-root="$PROJECT_DIR$/api/resource" remote-root="/var/www/html/resource" />
+          <mapping local-root="$PROJECT_DIR$/api/src" remote-root="/var/www/html/src" />
+          <mapping local-root="$PROJECT_DIR$/api/tests" remote-root="/var/www/html/tests" />
+          <mapping local-root="$PROJECT_DIR$/api/var" remote-root="/var/www/html/var" />
+          <mapping local-root="$PROJECT_DIR$/api/vendor" remote-root="/var/www/html/vendor" />
+        </path_mappings>
+      </server>
+    </servers>
+  </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.3" />
   <component name="PhpStanOptionsConfiguration">
     <option name="transferred" value="true" />
