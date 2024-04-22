@@ -31,23 +31,19 @@ class HealthcheckController extends AbstractController implements ControllerInte
         if ($environment && $database && $filesystem) {
             $response
                 ->setStatusCode(StatusCode::OK)
-                ->setMessage('All tests passed successfully.')
-                ->setData([
-                    'environment' => $environment,
-                    'database' => $database,
-                    'filesystem' => $filesystem
-                ]);
+                ->setMessage('All tests passed successfully.');
         } else {
             $response
                 ->setStatusCode(StatusCode::INTERNAL_ERROR)
-                ->setMessage('Some tests failed.')
-                ->setData([
-                    'environment' => $environment,
-                    'database' => $database,
-                    'filesystem' => $filesystem
-                ]);
+                ->setMessage('Some tests failed.');
         }
 
-        return $response->render();
+        return $response
+            ->setData([
+                'environment' => $environment,
+                'database' => $database,
+                'filesystem' => $filesystem
+            ])
+            ->render();
     }
 }
